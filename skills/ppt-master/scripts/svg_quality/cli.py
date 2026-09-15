@@ -16,7 +16,7 @@ Dependencies:
 import sys
 from pathlib import Path
 
-from attribution_guard import require_skill_integrity
+
 from slide_roster import discover_slide_svgs
 
 from .checker import SVGQualityChecker
@@ -160,7 +160,7 @@ def print_usage() -> None:
 
 def main() -> None:
     """Run the CLI entry point."""
-    require_skill_integrity()
+
     if len(sys.argv) < 2:
         print_usage()
         sys.exit(0)

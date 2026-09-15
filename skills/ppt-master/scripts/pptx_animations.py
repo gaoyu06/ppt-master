@@ -158,6 +158,7 @@ ANIMATION_EFFECT_OPTION_FIELDS = (
     'font_name',
     'relative',
     'size',
+    'path',
 )
 ANIMATION_TIMING_OPTION_FIELDS = (
     'repeat_count',
@@ -361,7 +362,7 @@ def _load_native_animations() -> dict[str, dict[str, Any]]:
         native[key] = spec
         category_counts[category] += 1
 
-    expected_counts = {'entrance': 53, 'emphasis': 33, 'path': 64, 'exit': 53}
+    expected_counts = {'entrance': 53, 'emphasis': 33, 'path': 65, 'exit': 53}
     if category_counts != expected_counts:
         raise RuntimeError(
             'native animation preset category counts changed: '
@@ -416,6 +417,7 @@ class AnimationTarget:
     after_effect_color: str | None = None
     sound_relationship_id: str | None = None
     sound_name: str | None = None
+    paragraph_index: int | None = None
 
     @property
     def playback_duration_ms(self) -> int:
@@ -457,6 +459,7 @@ class AnimationRowSummary:
     sound_relationship_id: str | None
     sound_name: str | None
     playback_duration_ms: int | None
+    paragraph_index: int | None
 
 
 @dataclass(frozen=True)
@@ -555,6 +558,46 @@ def _normalize_powerpoint_font_name(value: object, field: str) -> str:
     return normalized
 
 
+_MOTION_PATH_RE = re.compile(
+    r'[MmLlHhVvCcSsQqTtAaZzEe0-9+.,\- \t\n]+'
+)
+_MOTION_PATH_COMMAND_RE = re.compile(r'[LlHhVvCcSsQqTtAa]')
+
+
+def _normalize_motion_path(value: object, field: str) -> str:
+    """Return one DrawingML motion-path string in slide-relative units.
+
+    The grammar matches OOXML ``p:animMotion/@path``: SVG-style path data
+    whose coordinates are fractions of the slide size (``M 0 0 L 0.25 0``
+    moves the target 25% of the slide width right). PowerPoint terminates
+    authored paths with `` E``; it is appended when the author omits it.
+    """
+    if not isinstance(value, str) or not value.strip():
+        raise ValueError(
+            f'{field} must be a motion path in slide fractions '
+            f'(e.g. "M 0 0 L 0.25 0.1"): {value!r}'
+        )
+    normalized = ' '.join(value.strip().split())
+    if len(normalized) > 8000:
+        raise ValueError(f'{field} exceeds 8000 characters')
+    if not _MOTION_PATH_RE.fullmatch(normalized):
+        raise ValueError(
+            f'{field} contains characters outside the path grammar: {value!r}'
+        )
+    if not normalized[:1] in ('M', 'm'):
+        raise ValueError(
+            f'{field} must start with a moveto command (M): {value!r}'
+        )
+    if not _MOTION_PATH_COMMAND_RE.search(normalized):
+        raise ValueError(
+            f'{field} must contain at least one drawing command '
+            f'(L/C/H/V/Q/S/T/A): {value!r}'
+        )
+    if not normalized.endswith('E'):
+        normalized += ' E'
+    return normalized
+
+
 def normalize_animation_effect_options(
     effect: str,
     options: object = None,
@@ -627,6 +670,8 @@ def normalize_animation_effect_options(
         elif option_type == 'string':
             if name == 'font_name':
                 normalized[name] = _normalize_powerpoint_font_name(value, field)
+            elif name == 'path':
+                normalized[name] = _normalize_motion_path(value, field)
             else:
                 if not isinstance(value, str) or not value.strip():
                     raise ValueError(
@@ -860,6 +905,7 @@ def _normalize_target_mapping(
         'effect_options',
         'trigger',
         'trigger_shape_id',
+        'paragraph_index',
         *ANIMATION_TIMING_OPTION_FIELDS,
         'after_effect',
         'sound',
@@ -977,6 +1023,16 @@ def _normalize_target_mapping(
         target.get('after_effect')
     )
     sound_relationship_id, sound_name = _normalize_sound(target.get('sound'))
+    paragraph_index = target.get('paragraph_index')
+    if paragraph_index is not None and (
+        isinstance(paragraph_index, bool)
+        or not isinstance(paragraph_index, int)
+        or paragraph_index < 0
+    ):
+        raise ValueError(
+            'animation target paragraph_index must be a non-negative '
+            f'integer: {paragraph_index!r}'
+        )
     return AnimationTarget(
         shape_id=shape_id,
         delay_ms=delay_ms,
@@ -997,6 +1053,7 @@ def _normalize_target_mapping(
         after_effect_color=after_effect_color,
         sound_relationship_id=sound_relationship_id,
         sound_name=sound_name,
+        paragraph_index=paragraph_index,
     )
 
 
@@ -1439,6 +1496,12 @@ def _set_effect_option_value(
             raise RuntimeError('motion-path preset lost its p:animMotion node')
         motions[0].set('pathEditMode', 'relative' if value else 'fixed')
         return
+    if name == 'path':
+        motions = list(row.iter(_qn(PML_NS, 'animMotion')))
+        if len(motions) != 1:
+            raise RuntimeError('motion-path preset lost its p:animMotion node')
+        motions[0].set('path', str(value))
+        return
     if name == 'size':
         scales = list(row.iter(_qn(PML_NS, 'animScale')))
         if len(scales) != 1:
@@ -1737,9 +1800,29 @@ def _instantiate_animation_row(
             continue
         ctn.set('id', str(next_id))
         next_id += 1
-    for target in row.iter(_qn(PML_NS, 'spTgt')):
-        target.set('spid', str(shape_id))
+    for sp_target in row.iter(_qn(PML_NS, 'spTgt')):
+        sp_target.set('spid', str(shape_id))
+    _apply_paragraph_target(row, target.paragraph_index)
     return ET.tostring(row, encoding='unicode'), next_id
+
+
+def _apply_paragraph_target(
+    row: ET.Element,
+    paragraph_index: int | None,
+) -> None:
+    """Narrow one row's shape targets onto a single text paragraph."""
+    if paragraph_index is None:
+        return
+    for sp_target in row.iter(_qn(PML_NS, 'spTgt')):
+        tx_element = ET.SubElement(sp_target, _qn(PML_NS, 'txEl'))
+        ET.SubElement(
+            tx_element,
+            _qn(PML_NS, 'pRg'),
+            {
+                'st': str(paragraph_index),
+                'end': str(paragraph_index),
+            },
+        )
 
 
 def _build_animation_row_xml(
@@ -2091,6 +2174,22 @@ def create_sequence_timing_xml(
         ]
     )
 
+    build_shape_ids = sorted({
+        target.shape_id
+        for target in normalized_targets
+        if target.paragraph_index is not None
+    })
+    build_xml = ''
+    if build_shape_ids:
+        build_entries = '\n'.join(
+            f'      <p:bldP spid="{shape_id}" grpId="0" build="p" bldLvl="1" rev="1"/>'
+            for shape_id in build_shape_ids
+        )
+        build_xml = (
+            '\n    <p:bldLst>\n'
+            + build_entries
+            + '\n    </p:bldLst>'
+        )
     timing_xml = f'''  <p:timing>
     <p:tnLst>
       <p:par>
@@ -2100,7 +2199,7 @@ def create_sequence_timing_xml(
           </p:childTnLst>
         </p:cTn>
       </p:par>
-    </p:tnLst>
+    </p:tnLst>{build_xml}
   </p:timing>'''
     if not any(target.bounce_end for target in normalized_targets):
         return timing_xml
@@ -2274,6 +2373,50 @@ def _row_shape_id(row: ET.Element, errors: list[str]) -> int | None:
         )
         return None
     return unique[0]
+
+
+def _row_paragraph_index(row: ET.Element, errors: list[str]) -> int | None:
+    """Return the paragraph build index when one row targets a pRg range."""
+    ranges: list[tuple[int, int]] = []
+    for target in row.iter(_qn(PML_NS, 'spTgt')):
+        tx_elements = target.findall(_qn(PML_NS, 'txEl'))
+        if len(tx_elements) > 1:
+            errors.append('animation p:spTgt must hold at most one p:txEl')
+            continue
+        if not tx_elements:
+            continue
+        paragraph_ranges = tx_elements[0].findall(_qn(PML_NS, 'pRg'))
+        if len(paragraph_ranges) != 1:
+            errors.append('animation p:txEl must hold exactly one p:pRg')
+            continue
+        start = _int_attribute(
+            paragraph_ranges[0],
+            'st',
+            'animation p:pRg@st',
+            errors,
+            minimum=0,
+            maximum=MAX_OOXML_UNSIGNED_INT,
+        )
+        end = _int_attribute(
+            paragraph_ranges[0],
+            'end',
+            'animation p:pRg@end',
+            errors,
+            minimum=0,
+            maximum=MAX_OOXML_UNSIGNED_INT,
+        )
+        if start is not None and end is not None:
+            ranges.append((start, end))
+    unique = sorted(set(ranges))
+    if not unique:
+        return None
+    if len(unique) != 1 or unique[0][0] != unique[0][1]:
+        errors.append(
+            'one object-animation row must resolve to exactly one '
+            f'paragraph index; found {unique}'
+        )
+        return None
+    return unique[0][0]
 
 
 def _row_filter(
@@ -2478,6 +2621,18 @@ def _read_effect_options(
                 errors.append(f'motion-path effect {effect!r} has no single path')
             else:
                 values[name] = motions[0].get('pathEditMode') != 'fixed'
+        elif name == 'path':
+            motions = list(row.iter(_qn(PML_NS, 'animMotion')))
+            if len(motions) != 1:
+                errors.append(f'motion-path effect {effect!r} has no single path')
+            else:
+                try:
+                    values[name] = _normalize_motion_path(
+                        motions[0].get('path'),
+                        f'motion-path effect {effect!r} path',
+                    )
+                except ValueError as exc:
+                    errors.append(str(exc))
         elif name == 'size':
             scales = list(row.iter(_qn(PML_NS, 'animScale')))
             targets = (
@@ -2790,6 +2945,7 @@ def _row_matches_powerpoint_behavior(
     effect_options: Mapping[str, object],
     trigger: str,
     duration_ms: int,
+    paragraph_index: int | None,
     repeat_count: float | None,
     repeat_duration_ms: int | None,
     auto_reverse: bool,
@@ -2824,6 +2980,7 @@ def _row_matches_powerpoint_behavior(
         after_effect_color=after_effect_color,
         sound_relationship_id=sound_relationship_id,
         sound_name=sound_name,
+        paragraph_index=paragraph_index,
     )
     option_candidates = [dict(effect_options)]
     option_candidates.extend(
@@ -2857,6 +3014,7 @@ def _row_matches_powerpoint_behavior(
             int(expected.get('id', '1')),
         )
         _append_animation_sound(expected, target)
+        _apply_paragraph_target(expected, paragraph_index)
         if _animation_spec_matches_row(
             row,
             {'rowXml': ET.tostring(expected, encoding='unicode')},
@@ -2890,6 +3048,7 @@ def _animation_rows(
             )
             continue
         shape_id = _row_shape_id(row, errors)
+        paragraph_index = _row_paragraph_index(row, errors)
         filter_name = _row_filter(row, preset_class, errors)
         supported_effects, resolved_class, preset_id, preset_subtype = (
             _resolve_row_effect(
@@ -2945,6 +3104,7 @@ def _animation_rows(
                 effect_options=effect_options,
                 trigger=trigger,
                 duration_ms=duration_ms,
+                paragraph_index=paragraph_index,
                 repeat_count=repeat_count,
                 repeat_duration_ms=repeat_duration_ms,
                 auto_reverse=auto_reverse,
@@ -2990,6 +3150,7 @@ def _animation_rows(
                 sound_relationship_id=sound_relationship_id,
                 sound_name=sound_name,
                 playback_duration_ms=playback_duration_ms,
+                paragraph_index=paragraph_index,
             )
         )
     return rows
@@ -3443,6 +3604,10 @@ def validate_generated_animation_xml(
                 int(expected_behavior_row.get('id', '1')),
             )
             _append_animation_sound(expected_behavior_row, target)
+            _apply_paragraph_target(
+                expected_behavior_row,
+                target.paragraph_index,
+            )
             behavior_spec = {
                 'rowXml': ET.tostring(
                     expected_behavior_row,
@@ -3461,6 +3626,12 @@ def validate_generated_animation_xml(
             errors.append(
                 f'animation row {index} targets shape {actual.shape_id}; '
                 f'expected {target.shape_id}'
+            )
+        if actual.paragraph_index != target.paragraph_index:
+            errors.append(
+                f'animation row {index} paragraph index is '
+                f'{actual.paragraph_index!r}; expected '
+                f'{target.paragraph_index!r}'
             )
         expected_row_trigger = (
             target.trigger

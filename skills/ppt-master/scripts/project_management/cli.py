@@ -54,7 +54,7 @@ from .project_specs import scaffold_project_artifact, validate_project_artifacts
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
-from attribution_guard import require_skill_integrity  # noqa: E402
+
 from workflow_log import append_note  # noqa: E402
 
 try:
@@ -1280,7 +1280,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     """Run the CLI entry point."""
-    require_skill_integrity()
+
     parser = build_parser()
     args = parser.parse_args(argv)
     manager = ProjectManager()

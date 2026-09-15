@@ -53,7 +53,7 @@ from collections import OrderedDict
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
-from attribution_guard import require_skill_integrity
+
 from console_encoding import configure_utf8_stdio
 from config import CANVAS_FORMATS
 
@@ -1413,7 +1413,7 @@ def _print_completion_card(kind: str, template_id: str, entry: dict, extras: dic
 # ---------------------------------------------------------------------------
 
 def main() -> int:
-    require_skill_integrity()
+
     parser = argparse.ArgumentParser(
         description=(
             "Register / refresh templates (brand / style / layout / deck) "

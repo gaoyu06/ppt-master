@@ -26,9 +26,7 @@ _UNSUPPORTED_TIMING_TAGS = frozenset(
         "audio",
         "bldDgm",
         "bldGraphic",
-        "bldLst",
         "bldOleChart",
-        "bldP",
         "cmd",
         "video",
     }
@@ -100,6 +98,7 @@ def read_animation_config(
     delays = _relative_delays(summary.rows)
     expected_targets: list[dict[str, object]] = []
     rows_by_group: dict[str, list[dict[str, object]]] = {}
+    paragraph_run: tuple[str, tuple[object, ...], int] | None = None
 
     for order, (row, delay_ms) in enumerate(
         zip(summary.rows, delays),
@@ -147,7 +146,37 @@ def read_animation_config(
         if row.trigger_shape_id is not None:
             expected_target["trigger_shape_id"] = row.trigger_shape_id
             sidecar_row["trigger_shape"] = trigger_group_id
+        if row.paragraph_index is not None:
+            expected_target["paragraph_index"] = row.paragraph_index
         expected_targets.append(expected_target)
+
+        if row.paragraph_index is not None:
+            run_key = (
+                group_id,
+                row.shape_id,
+                row.effect,
+                row.trigger,
+                trigger_group_id,
+                row.duration_ms,
+                delay_ms,
+                repr(sorted(effect_options.items())),
+            )
+            if (
+                paragraph_run is not None
+                and paragraph_run[0] == group_id
+                and paragraph_run[1] == run_key
+                and row.paragraph_index == paragraph_run[2]
+            ):
+                paragraph_run = (
+                    paragraph_run[0],
+                    paragraph_run[1],
+                    paragraph_run[2] + 1,
+                )
+                continue
+            sidecar_row["by_paragraph"] = True
+            paragraph_run = (group_id, run_key, row.paragraph_index + 1)
+        else:
+            paragraph_run = None
         rows_by_group.setdefault(group_id, []).append(sidecar_row)
 
     try:
@@ -186,7 +215,12 @@ def _unsupported_timing_tags(slide_xml: bytes) -> tuple[str, ...]:
 
 
 def _top_level_shape_group_index(slide_svg: str) -> dict[int, tuple[str, ...]]:
-    """Index direct slide-local SVG group anchors by source shape id."""
+    """Index slide shape ids onto top-level SVG group anchors.
+
+    Rows targeting a paragraph build carry the inner text shape id, so
+    descendant ``data-pptx-shape-id`` values resolve to their owning
+    top-level group as well.
+    """
     try:
         root = ET.fromstring(slide_svg)
     except ET.ParseError as exc:
@@ -199,15 +233,16 @@ def _top_level_shape_group_index(slide_svg: str) -> dict[int, tuple[str, ...]]:
             continue
         if child.get("data-pptx-shape-scope") != "slide":
             continue
-        raw_shape_id = child.get("data-pptx-shape-id") or ""
-        if not raw_shape_id.isdigit() or int(raw_shape_id) <= 0:
-            continue
         group_id = child.get("id") or ""
         if not group_id.strip():
             continue
-        shape_id = int(raw_shape_id)
-        groups.setdefault(shape_id, []).append(group_id)
         group_id_counts[group_id] = group_id_counts.get(group_id, 0) + 1
+        for elem in child.iter():
+            raw_shape_id = elem.get("data-pptx-shape-id") or ""
+            if raw_shape_id.isdigit() and int(raw_shape_id) > 0:
+                group_ids = groups.setdefault(int(raw_shape_id), [])
+                if group_id not in group_ids:
+                    group_ids.append(group_id)
 
     return {
         shape_id: (

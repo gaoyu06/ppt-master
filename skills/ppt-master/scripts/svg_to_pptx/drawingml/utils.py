@@ -261,6 +261,14 @@ PROJECT_FILTER_EFFECT_PRIMITIVES = frozenset({
     'feDropShadow',
     'feGaussianBlur',
 })
+PROJECT_FILTER_EFFECT_KINDS = frozenset({
+    'shadow',
+    'glow',
+    'inner-shadow',
+    'reflection',
+    'soft-edge',
+    'blur',
+})
 PROJECT_FILTER_PUBLIC_TARGETS = frozenset({
     'rect',
     'circle',
@@ -2750,6 +2758,7 @@ def parse_project_filter_params(
         'opacity': opacity,
         'color': color,
         'has_offset': has_offset,
+        'effect': (filter_elem.get('data-pptx-effect') or '').strip().lower(),
     }
 
 
@@ -2762,13 +2771,15 @@ def project_filter_drawingml_coordinates(
     std_dev = float(params['std_dev'])
     dx = float(params['dx'])
     dy = float(params['dy'])
-    if kind == 'shadow':
+    if kind in ('shadow', 'inner-shadow', 'reflection'):
         coordinates_px = {
             'blurRad': std_dev * 2.0,
             'dist': math.hypot(dx, dy),
         }
     elif kind == 'glow':
         coordinates_px = {'rad': std_dev}
+    elif kind in ('soft-edge', 'blur'):
+        coordinates_px = {'rad': std_dev * 2.0}
     else:
         raise ValueError(f'unsupported native filter kind {kind!r}')
 
@@ -2833,6 +2844,11 @@ def project_filter_errors(root: ET.Element) -> list[str]:
                 f'{label} cannot combine filter and clip-path on the same '
                 'image; put the filter on an exact single-image outer <g>'
             )
+        if elem.get('data-pptx-effect') is not None and tag != 'filter':
+            errors.add(
+                f'{label} data-pptx-effect belongs on a <filter> definition, '
+                'not on the element carrying the filter'
+            )
         match = re.fullmatch(r'url\(#([^)]+)\)', raw_filter.strip())
         if match is None:
             errors.add(
@@ -2850,6 +2866,15 @@ def project_filter_errors(root: ET.Element) -> list[str]:
     for filter_id, filter_elem in filters_by_id.items():
         label = f'filter #{filter_id}'
         parameters_are_valid = True
+        declared_effect = (
+            filter_elem.get('data-pptx-effect') or ''
+        ).strip().lower()
+        if declared_effect and declared_effect not in PROJECT_FILTER_EFFECT_KINDS:
+            errors.add(
+                f'{label} data-pptx-effect={declared_effect!r} is not a '
+                'registered native effect kind; use one of: '
+                + ', '.join(sorted(PROJECT_FILTER_EFFECT_KINDS))
+            )
         primitive_units = filter_elem.get('primitiveUnits')
         if primitive_units not in (None, 'userSpaceOnUse'):
             parameters_are_valid = False

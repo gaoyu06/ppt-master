@@ -692,10 +692,85 @@ def build_glow_xml(
 </a:effectLst>'''
 
 
+def build_inner_shadow_xml(
+    filter_elem: ET.Element,
+    opacity: float | None = None,
+) -> str:
+    """Build <a:effectLst> with <a:innerShdw> from SVG filter element."""
+    if filter_elem is None:
+        return ''
+
+    p = parse_project_filter_params(filter_elem)
+    if not p['has_offset']:
+        p = {**p, 'dy': 4.0}
+    coordinates = project_filter_drawingml_coordinates(p, 'inner-shadow')
+    dir_angle = _shadow_dir_angle(p['dx'], p['dy'])
+    opacity_multiplier = 1.0 if opacity is None else opacity
+    alpha_val = quantize_ooxml_alpha(
+        p['opacity'] * opacity_multiplier * 0.75
+    )
+
+    return f'''<a:effectLst>
+<a:innerShdw blurRad="{coordinates['blurRad']}" dist="{coordinates['dist']}" dir="{dir_angle}">
+<a:srgbClr val="{p['color']}"><a:alpha val="{alpha_val}"/></a:srgbClr>
+</a:innerShdw>
+</a:effectLst>'''
+
+
+def build_reflection_xml(
+    filter_elem: ET.Element,
+    opacity: float | None = None,
+) -> str:
+    """Build <a:effectLst> with <a:reflection> from SVG filter element.
+
+    flood-opacity maps to the reflection start alpha; feOffset dy (default
+    downward) sets the reflection direction.
+    """
+    if filter_elem is None:
+        return ''
+
+    p = parse_project_filter_params(filter_elem)
+    coordinates = project_filter_drawingml_coordinates(p, 'reflection')
+    dx = float(p['dx'])
+    dy = float(p['dy'])
+    dir_angle = _shadow_dir_angle(dx, dy) if p['has_offset'] else 5400000
+    opacity_multiplier = 1.0 if opacity is None else opacity
+    start_alpha = int(round(p['opacity'] * opacity_multiplier * 100000))
+    algn = 'tl' if dy < 0 else 'bl'
+
+    return f'''<a:effectLst>
+<a:reflection blurRad="{coordinates['blurRad']}" stA="{start_alpha}" stPos="0" endA="300" endPos="100000" dist="{coordinates['dist']}" dir="{dir_angle}" fadeDir="{dir_angle}" algn="{algn}" rotWithShape="0"/>
+</a:effectLst>'''
+
+
+def build_soft_edge_xml(filter_elem: ET.Element) -> str:
+    """Build <a:effectLst> with <a:softEdge> from SVG filter element."""
+    if filter_elem is None:
+        return ''
+
+    p = parse_project_filter_params(filter_elem)
+    rad = project_filter_drawingml_coordinates(p, 'soft-edge')['rad']
+    return f'<a:effectLst><a:softEdge rad="{rad}"/></a:effectLst>'
+
+
+def build_blur_xml(filter_elem: ET.Element) -> str:
+    """Build <a:effectLst> with <a:blur> from SVG filter element."""
+    if filter_elem is None:
+        return ''
+
+    p = parse_project_filter_params(filter_elem)
+    rad = project_filter_drawingml_coordinates(p, 'blur')['rad']
+    return f'<a:effectLst><a:blur rad="{rad}" grow="0"/></a:effectLst>'
+
+
 def classify_filter_effect(filter_elem: ET.Element) -> str | None:
     """Classify an SVG filter into a supported DrawingML effect kind."""
     if filter_elem is None:
         return None
+
+    declared = (filter_elem.get('data-pptx-effect') or '').strip().lower()
+    if declared:
+        return declared
 
     p = parse_project_filter_params(filter_elem)
     return 'shadow' if p['has_offset'] else 'glow'
@@ -719,6 +794,14 @@ def build_effect_xml(
         return build_shadow_xml(filter_elem, opacity)
     if effect_kind == 'glow':
         return build_glow_xml(filter_elem, opacity)
+    if effect_kind == 'inner-shadow':
+        return build_inner_shadow_xml(filter_elem, opacity)
+    if effect_kind == 'reflection':
+        return build_reflection_xml(filter_elem, opacity)
+    if effect_kind == 'soft-edge':
+        return build_soft_edge_xml(filter_elem)
+    if effect_kind == 'blur':
+        return build_blur_xml(filter_elem)
     return ''
 
 

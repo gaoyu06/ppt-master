@@ -189,3 +189,4 @@ projects/*
 skills/ppt-master/templates/brands/*/exports/
 skills/ppt-master/templates/decks/*/exports/
 skills/ppt-master/templates/layouts/*/exports/
+.venv/

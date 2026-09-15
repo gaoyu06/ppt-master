@@ -57,6 +57,7 @@ _GROUP_EFFECT_FIELDS = frozenset({
     'order',
     'trigger',
     'trigger_shape',
+    'by_paragraph',
     *ANIMATION_TIMING_OPTION_FIELDS,
     'after_effect',
     'sound',
@@ -1213,6 +1214,15 @@ def _animation_effect_entry_errors(
                 f'animations.json {path}.order must be a positive integer: '
                 f'{order!r}'
             )
+
+    if 'by_paragraph' in effect_cfg and not isinstance(
+        effect_cfg['by_paragraph'],
+        bool,
+    ):
+        errors.append(
+            f'animations.json {path}.by_paragraph must be a boolean: '
+            f'{effect_cfg["by_paragraph"]!r}'
+        )
 
     if 'trigger' in effect_cfg:
         trigger_error = _animation_trigger_error(effect_cfg['trigger'], path)

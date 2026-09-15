@@ -5578,6 +5578,57 @@ def _slide_animation_settings(
     return effect, duration, stagger, trigger, resolved_cfg
 
 
+def _paragraph_build_targets(slide_xml: str) -> dict[int, tuple[int, int]]:
+    """Map animation anchor ids to ``(text shape id, paragraph count)``.
+
+    A ``by_paragraph`` animation must target a ``p:sp`` with a ``txBody``.
+    A top-level SVG ``<g>`` compiles to ``p:grpSp``, which carries no text;
+    its anchor resolves to the first text-bearing descendant shape.
+    """
+    try:
+        root = ET.fromstring(slide_xml)
+    except ET.ParseError:
+        return {}
+    sp_tag = f'{{{PML_NS}}}sp'
+    grp_tag = f'{{{PML_NS}}}grpSp'
+    tx_body_tag = f'{{{PML_NS}}}txBody'
+    c_nv_pr_tag = f'{{{PML_NS}}}cNvPr'
+    paragraph_tag = f'{{{DML_NS}}}p'
+
+    def own_shape_id(elem: ET.Element) -> int | None:
+        c_nv_pr = elem.find(f'.//{c_nv_pr_tag}')
+        if c_nv_pr is None or c_nv_pr.get('id') is None:
+            return None
+        try:
+            return int(str(c_nv_pr.get('id')))
+        except ValueError:
+            return None
+
+    def paragraph_count(sp: ET.Element) -> int:
+        tx_body = sp.find(tx_body_tag)
+        if tx_body is None:
+            return 0
+        return len(tx_body.findall(paragraph_tag))
+
+    targets: dict[int, tuple[int, int]] = {}
+    for sp in root.iter(sp_tag):
+        shape_id = own_shape_id(sp)
+        count = paragraph_count(sp)
+        if shape_id is not None and count:
+            targets[shape_id] = (shape_id, count)
+    for grp in root.iter(grp_tag):
+        group_id = own_shape_id(grp)
+        if group_id is None:
+            continue
+        for sp in grp.iter(sp_tag):
+            shape_id = own_shape_id(sp)
+            count = paragraph_count(sp)
+            if shape_id is not None and count:
+                targets[group_id] = (shape_id, count)
+                break
+    return targets
+
+
 def _build_sequence_targets(
     anim_targets: list[tuple[int, str]],
     slide_name: str,
@@ -5588,11 +5639,13 @@ def _build_sequence_targets(
     stagger: float,
     mixed_animation_offset: int,
     animation_rng: random.Random,
+    slide_xml: str = '',
 ) -> tuple[list[dict[str, Any]], int]:
     groups_value = slide_cfg.get('groups', {})
     if not isinstance(groups_value, dict):
         raise ValueError('animations.json slide groups must be an object')
     groups_cfg = groups_value
+    paragraph_targets = _paragraph_build_targets(slide_xml)
     shape_ids_by_group = {
         svg_id: sid for sid, svg_id in anim_targets
     }
@@ -5805,7 +5858,21 @@ def _build_sequence_targets(
         target_entry.update(inherited_fields)
         if 'sound' in target_entry:
             target_entry['_sound_path'] = target_entry.pop('sound')
-        seq_targets.append(target_entry)
+        if group_cfg.get('by_paragraph'):
+            resolved = paragraph_targets.get(shape_id)
+            if resolved is None:
+                raise ValueError(
+                    f'animations.json {effect_path}.by_paragraph requires '
+                    'the target to resolve to a text-bearing shape'
+                )
+            text_shape_id, paragraph_count = resolved
+            for paragraph_index in range(paragraph_count):
+                paragraph_entry = dict(target_entry)
+                paragraph_entry['shape_id'] = text_shape_id
+                paragraph_entry['paragraph_index'] = paragraph_index
+                seq_targets.append(paragraph_entry)
+        else:
+            seq_targets.append(target_entry)
 
     mixed_count = 0
     if animation == 'mixed':
@@ -7523,6 +7590,7 @@ def create_pptx_with_native_svg(
                             slide_animation_stagger,
                             mixed_animation_offset,
                             animation_rng,
+                            slide_xml,
                         )
                         seq_targets = _materialize_animation_sounds(
                             (

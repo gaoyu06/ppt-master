@@ -6,6 +6,7 @@ import base64
 import binascii
 import hashlib
 import io
+import json
 import math
 import re
 from dataclasses import dataclass
@@ -3608,6 +3609,15 @@ def convert_text(elem: ET.Element, ctx: ConvertContext) -> ShapeResult | None:
     # instead of shrinking to glyph bounds. Reconstruct insets from the SVG
     # anchor/baseline so the visible text stays at its imported position while
     # remaining ordinary editable DrawingML text.
+    body_pr_vert = (elem.get('data-pptx-vert') or '').strip()
+    body_pr_anchor = (elem.get('data-pptx-anchor') or '').strip() or 't'
+    body_pr_autofit = {
+        'none': '<a:noAutofit/>',
+        'norm': '<a:normAutofit/>',
+        'shape': '<a:spAutoFit/>',
+    }.get((elem.get('data-pptx-autofit') or '').strip().lower())
+    vert_attr = f' vert="{body_pr_vert}"' if body_pr_vert else ''
+
     if exact_text_frame is not None:
         if exact_text_insets is None:
             raise ValueError('data-pptx-frame text insets were not resolved')
@@ -3620,7 +3630,8 @@ def convert_text(elem: ET.Element, ctx: ConvertContext) -> ShapeResult | None:
             f'lIns="{px_to_emu(left_inset)}" '
             f'tIns="{px_to_emu(top_inset)}" '
             f'rIns="{px_to_emu(right_inset)}" bIns="0" '
-            'anchor="t" anchorCtr="0">\n<a:noAutofit/>\n</a:bodyPr>'
+            f'anchor="{body_pr_anchor}" anchorCtr="0"{vert_attr}>\n'
+            f'{body_pr_autofit or "<a:noAutofit/>"}\n</a:bodyPr>'
         )
     # Preserve mode keeps authored <a:br/> boundaries and lets an ordinary
     # generated text box follow later manual edits, such as deleting a break.
@@ -3631,7 +3642,7 @@ def convert_text(elem: ET.Element, ctx: ConvertContext) -> ShapeResult | None:
         paragraph_wrap = (
             'none' if ctx.text_flow == TEXT_FLOW_PRESERVE else 'square'
         )
-        paragraph_autofit = (
+        paragraph_autofit = body_pr_autofit or (
             '<a:spAutoFit/>'
             if (
                 ctx.text_flow == TEXT_FLOW_PRESERVE
@@ -3642,12 +3653,14 @@ def convert_text(elem: ET.Element, ctx: ConvertContext) -> ShapeResult | None:
         body_pr_xml = (
             f'<a:bodyPr wrap="{paragraph_wrap}" '
             'lIns="0" tIns="0" rIns="0" bIns="0" '
-            f'anchor="t" anchorCtr="0">\n{paragraph_autofit}\n</a:bodyPr>'
+            f'anchor="{body_pr_anchor}" anchorCtr="0"{vert_attr}>\n'
+            f'{paragraph_autofit}\n</a:bodyPr>'
         )
     else:
         body_pr_xml = (
             '<a:bodyPr wrap="none" lIns="0" tIns="0" rIns="0" bIns="0" '
-            'anchor="t" anchorCtr="0">\n<a:spAutoFit/>\n</a:bodyPr>'
+            f'anchor="{body_pr_anchor}" anchorCtr="0"{vert_attr}>\n'
+            f'{body_pr_autofit or "<a:spAutoFit/>"}\n</a:bodyPr>'
         )
 
     shape_xml = f'''<p:sp>

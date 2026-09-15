@@ -706,6 +706,13 @@ def _diagnose_text_declaration(
     return True, None
 
 
+_TEXT_BODY_PR_MARKERS = {
+    'data-pptx-vert': ('eaVert', 'vert', 'wordArtVert', 'wordArtVertRtl', 'horz'),
+    'data-pptx-anchor': ('t', 'ctr', 'b', 'just', 'dist'),
+    'data-pptx-autofit': ('none', 'norm', 'shape'),
+}
+
+
 def project_text_property_diagnostics(
     root: ET.Element,
 ) -> list[TextPropertyDiagnostic]:
@@ -715,6 +722,22 @@ def project_text_property_diagnostics(
     for elem in root.iter():
         tag = _local_name(elem.tag)
         label = _element_label(elem)
+
+        for marker, allowed_values in _TEXT_BODY_PR_MARKERS.items():
+            raw_marker = elem.get(marker)
+            if raw_marker is None:
+                continue
+            if tag != 'text':
+                diagnostics.append(TextPropertyDiagnostic(
+                    'error', label, 'attribute', marker, raw_marker,
+                    f'{label} uses {marker} on <{tag}>; it belongs on <text>',
+                ))
+            elif raw_marker.strip() not in allowed_values:
+                diagnostics.append(TextPropertyDiagnostic(
+                    'error', label, 'attribute', marker, raw_marker,
+                    f'{label} {marker}={raw_marker!r}; expected one of '
+                    + ', '.join(allowed_values),
+                ))
         direct_allowlist = {
             'text': _TEXT_DIRECT_ATTRIBUTES,
             'tspan': _TSPAN_DIRECT_ATTRIBUTES,
