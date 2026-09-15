@@ -8,7 +8,7 @@
   <g id="hero-dot">
     <circle cx="1150" cy="100" r="60" fill="#E63946"
             pptx:effect="glow(rad=12,color=#E63946,alpha=0.6)"/>
-    <pptx:anim effect="emphasis_grow_shrink" start="with" dur="1.2" size="1.15"/>
+    <pptx:anim effect="emphasis_grow_shrink" start="with" dur="1.2" size="1.15" repeat="indefinite" autorev="true"/>
   </g>
 
   <g id="cover-title">
@@ -19,7 +19,7 @@
 
   <g id="cover-sub">
     <text x="120" y="380" font-size="24" fill="#A8DADC" font-family="Arial"
-          pptx:autofit="norm">本页应看到：标题淡入(点击)、右上角红圆持续放大缩小、标题投影、本页备注</text>
+          pptx:autofit="norm">本页应看到：标题淡入(点击)、右上角红圆持续脉冲(repeat=indefinite)、标题投影、本页备注</text>
     <pptx:anim effect="entrance_wipe" start="after" dur="0.5" dir="up"/>
   </g>
 </svg>

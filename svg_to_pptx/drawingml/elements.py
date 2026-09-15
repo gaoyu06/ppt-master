@@ -3262,7 +3262,18 @@ def convert_text(elem: ET.Element, ctx: ConvertContext) -> ShapeResult | None:
         if ctx.text_flow != TEXT_FLOW_SPLIT
         else None
     )
-    line_height_px = _f(line_height_attr) if line_height_attr is not None else None
+    line_height_pct: float | None = None
+    line_height_px: float | None = None
+    if line_height_attr is not None:
+        raw_lh = line_height_attr.strip()
+        if raw_lh.endswith('x'):
+            line_height_pct = _f(raw_lh[:-1]) * 100.0
+        elif raw_lh.endswith('%'):
+            line_height_pct = _f(raw_lh[:-1])
+        else:
+            line_height_px = _f(raw_lh.removesuffix('px'))
+        if line_height_pct is not None:
+            line_height_px = font_size * line_height_pct / 100.0
     paragraph_runs: list[list[dict[str, Any]]] | None = None
     paragraph_space_before: list[float] = []
     paragraph_bullets: list[dict[str, Any] | None] = []
@@ -3585,9 +3596,15 @@ def convert_text(elem: ET.Element, ctx: ConvertContext) -> ShapeResult | None:
     rot_attr = f' rot="{text_rot}"' if text_rot else ''
 
     if paragraph_runs is not None:
-        # SVG dy(px) -> hundredths-of-a-point: dy_pt = dy_px * 0.75, then x100.
-        line_spc_val = round(line_height_px * FONT_PX_TO_HUNDREDTHS_PT)
-        ln_spc_xml = f'<a:lnSpc><a:spcPts val="{line_spc_val}"/></a:lnSpc>'
+        if line_height_pct is not None:
+            ln_spc_xml = (
+                f'<a:lnSpc><a:spcPct val="{round(line_height_pct * 1000)}"/>'
+                '</a:lnSpc>'
+            )
+        else:
+            # SVG dy(px) -> hundredths-of-a-point: dy_pt = dy_px * 0.75, then x100.
+            line_spc_val = round(line_height_px * FONT_PX_TO_HUNDREDTHS_PT)
+            ln_spc_xml = f'<a:lnSpc><a:spcPts val="{line_spc_val}"/></a:lnSpc>'
         paragraph_xml_chunks = []
         for line, extra_px, bullet in zip(paragraph_runs, paragraph_space_before, paragraph_bullets):
             spc_bef_xml = ''

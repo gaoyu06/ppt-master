@@ -525,7 +525,7 @@ def _animation_parameter_errors(
 
     repeat_count = value.get('repeat_count')
     repeat_duration = value.get('repeat_duration')
-    if repeat_count is not None:
+    if repeat_count is not None and repeat_count != 'indefinite':
         if (
             isinstance(repeat_count, bool)
             or not isinstance(repeat_count, (int, float))

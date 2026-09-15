@@ -104,7 +104,7 @@ in percent or `0–1`, `color` is `#rgb[a]`/`#rrggbb[aa]`.
 
 | Attribute | Meaning |
 |---|---|
-| `pptx:line-height` | paragraph line spacing (px or multiple) |
+| `pptx:line-height` | paragraph line spacing: `38`/`38px` in px, `1.6x`/`160%` as multiple |
 | `pptx:space-before` | paragraph space before (px) |
 | `pptx:soft-break` | intra-paragraph soft line break flag |
 
@@ -141,7 +141,7 @@ Multiple children on one element form an ordered sequence
 | `path` | path data, slide fractions (`M 0 0 L .3 .1`) | — |
 | `relative` | `true` `false` (pathEditMode) | `true` |
 | `on` | `idref` of another anchor element → interactive click trigger | — |
-| `repeat` | count (`3`) or seconds (`2s`) | — |
+| `repeat` | count (`3`), seconds (`2s`), or `indefinite` | — |
 | `autorev` `rewind` `accel` `decel` `bounce` `restart` | booleans/fractions/enum | — |
 | `after` | `dim` `hide` `hide-on-next-click` `color=#…` | — |
 | `sound` | project-relative `.wav` | — |

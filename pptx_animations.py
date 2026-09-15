@@ -405,7 +405,7 @@ class AnimationTarget:
     effect_options: Mapping[str, object]
     trigger: str = 'after-previous'
     trigger_shape_id: int | None = None
-    repeat_count: float | None = None
+    repeat_count: float | str | None = None
     repeat_duration_ms: int | None = None
     auto_reverse: bool | None = None
     rewind: bool | None = None
@@ -426,6 +426,10 @@ class AnimationTarget:
         if self.repeat_duration_ms is not None:
             return self.repeat_duration_ms
         if self.repeat_count is not None:
+            if self.repeat_count == 'indefinite':
+                # Scheduling conservative: one play, following animations
+                # still start on time even though playback never ends.
+                return one_play
             return max(1, round(one_play * self.repeat_count))
         return one_play
 
@@ -446,7 +450,7 @@ class AnimationRowSummary:
     filter_name: str | None
     effect_options: Mapping[str, object]
     trigger_shape_id: int | None
-    repeat_count: float | None
+    repeat_count: float | str | None
     repeat_duration_ms: int | None
     auto_reverse: bool
     rewind: bool
@@ -813,7 +817,9 @@ def _optional_ratio(value: object, field: str) -> float:
     return ratio
 
 
-def _normalize_repeat_count(value: object) -> float:
+def _normalize_repeat_count(value: object) -> float | str:
+    if value == 'indefinite':
+        return 'indefinite'
     count = _finite_number(value, 'animation repeat_count')
     if count <= 0 or count * 1000 > MAX_OOXML_UNSIGNED_INT:
         raise ValueError(
@@ -1575,7 +1581,10 @@ def animation_effect_supports_bounce_end(
 
 def _apply_timing_options(row: ET.Element, target: AnimationTarget) -> None:
     if target.repeat_count is not None:
-        row.set('repeatCount', str(round(target.repeat_count * 1000)))
+        if target.repeat_count == 'indefinite':
+            row.set('repeatCount', 'indefinite')
+        else:
+            row.set('repeatCount', str(round(target.repeat_count * 1000)))
         row.attrib.pop('repeatDur', None)
     if target.repeat_duration_ms is not None:
         row.set('repeatDur', str(target.repeat_duration_ms))
@@ -2661,7 +2670,7 @@ def _timing_summary(
     duration_ms: int | None,
     errors: list[str],
 ) -> tuple[
-    float | None,
+    float | str | None,
     int | None,
     bool,
     bool,
@@ -2672,12 +2681,14 @@ def _timing_summary(
     int | None,
 ]:
     raw_repeat_count = row.get('repeatCount')
-    repeat_count = None
+    repeat_count: float | str | None = None
     if raw_repeat_count is not None:
-        if not re.fullmatch(r'\d+', raw_repeat_count):
+        if raw_repeat_count == 'indefinite':
+            repeat_count = 'indefinite'
+        elif not re.fullmatch(r'\d+', raw_repeat_count):
             errors.append(
-                f'object-animation repeatCount must be numeric; found '
-                f'{raw_repeat_count!r}'
+                f'object-animation repeatCount must be numeric or '
+                f'"indefinite"; found {raw_repeat_count!r}'
             )
         else:
             repeat_count = int(raw_repeat_count) / 1000
@@ -2762,7 +2773,11 @@ def _timing_summary(
         if repeat_duration_ms is not None:
             playback_duration_ms = repeat_duration_ms
         elif repeat_count is not None:
-            playback_duration_ms = max(1, round(one_play * repeat_count))
+            playback_duration_ms = (
+                one_play
+                if repeat_count == 'indefinite'
+                else max(1, round(one_play * repeat_count))
+            )
         else:
             playback_duration_ms = one_play
     return (

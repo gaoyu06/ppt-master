@@ -191,7 +191,9 @@ def _anim_entry(elem: ET.Element, label: str, order: int) -> dict[str, Any]:
     raw_repeat = elem.get('repeat')
     if raw_repeat is not None:
         repeat = raw_repeat.strip().lower()
-        if re.fullmatch(r'\d+', repeat):
+        if repeat == 'indefinite':
+            entry['repeat_count'] = 'indefinite'
+        elif re.fullmatch(r'\d+', repeat):
             entry['repeat_count'] = int(repeat)
         else:
             entry['repeat_duration'] = _number(

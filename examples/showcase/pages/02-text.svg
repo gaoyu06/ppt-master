@@ -15,9 +15,9 @@
 
   <g id="bullets" pptx:build="paragraph">
     <text x="160" y="180" font-size="24" fill="#333333" font-family="Arial"
-          pptx:line-height="1.6" pptx:space-before="12">
+          pptx:line-height="1.6x" pptx:space-before="12">
       <tspan x="160" dy="0">• 第一条：应按段落逐条进入（wipe up）</tspan>
-      <tspan x="160" dy="50">• 第二条：行距 1.6、段前距 12px</tspan>
+      <tspan x="160" dy="50">• 第二条：行距 1.6x、段前距 12px</tspan>
       <tspan x="160" dy="50">• 第三条：本条包含软换行<tspan pptx:soft-break="true">——同一 a:p 内的 a:br</tspan></tspan>
       <tspan x="160" dy="50" pptx:line-break="true">• 第四条：本条之后是硬换行（新 a:p）</tspan>
       <tspan x="160" dy="50">• 第五条：build=paragraph 应展开为 pRg 0..4</tspan>

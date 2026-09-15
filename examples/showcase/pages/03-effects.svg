@@ -37,13 +37,13 @@
 
   <g id="card-refl">
     <rect x="470" y="380" width="340" height="180" rx="12" fill="#2A9D8F"
-          pptx:effect="reflection(dist=4,alpha=0.4)"/>
+          pptx:effect="reflection(dist=10,alpha=0.55)"/>
     <text x="500" y="480" font-size="22" fill="#FFF" font-family="Arial">reflection：倒影</text>
   </g>
 
   <g id="card-blur">
     <rect x="860" y="380" width="340" height="180" rx="12" fill="#F4A261"
-          pptx:effect="blur(rad=6)"/>
+          pptx:effect="blur(rad=14)"/>
     <text x="890" y="480" font-size="22" fill="#FFF" font-family="Arial">blur：整体模糊</text>
   </g>
 </svg>
