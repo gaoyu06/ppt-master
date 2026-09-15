@@ -18,8 +18,8 @@
           pptx:line-height="1.6x" pptx:space-before="12">
       <tspan x="160" dy="0">• 第一条：应按段落逐条进入（wipe up）</tspan>
       <tspan x="160" dy="50">• 第二条：行距 1.6x、段前距 12px</tspan>
-      <tspan x="160" dy="50">• 第三条：本条包含软换行<tspan pptx:soft-break="true">——同一 a:p 内的 a:br</tspan></tspan>
-      <tspan x="160" dy="50" pptx:line-break="true">• 第四条：本条之后是硬换行（新 a:p）</tspan>
+      <tspan x="160" dy="50">• 第三条：本行嵌套 tspan<tspan>——嵌套文本应内联同行</tspan></tspan>
+      <tspan x="160" dy="50" pptx:line-break="true">• 第四条：本条用 line-break，是上一条 a:p 内的 a:br 续行（缩进正常）</tspan>
       <tspan x="160" dy="50">• 第五条：build=paragraph 应展开为 pRg 0..4</tspan>
     </text>
     <pptx:anim effect="entrance_wipe" start="click" dur="0.4" dir="up"/>

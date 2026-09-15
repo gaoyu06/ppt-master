@@ -737,9 +737,11 @@ def build_reflection_xml(
     opacity_multiplier = 1.0 if opacity is None else opacity
     start_alpha = int(round(p['opacity'] * opacity_multiplier * 100000))
     algn = 'tl' if dy < 0 else 'bl'
+    vertical = abs(dy) >= abs(dx)
+    flip = ' sy="-100000"' if vertical else ' sx="-100000"'
 
     return f'''<a:effectLst>
-<a:reflection blurRad="{coordinates['blurRad']}" stA="{start_alpha}" stPos="0" endA="300" endPos="100000" dist="{coordinates['dist']}" dir="{dir_angle}" fadeDir="{dir_angle}" algn="{algn}" rotWithShape="0"/>
+<a:reflection blurRad="{coordinates['blurRad']}" stA="{start_alpha}" stPos="0" endA="300" endPos="100000" dist="{coordinates['dist']}" dir="{dir_angle}" fadeDir="{dir_angle}"{flip} algn="{algn}" rotWithShape="0"/>
 </a:effectLst>'''
 
 

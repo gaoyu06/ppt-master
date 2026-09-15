@@ -3266,12 +3266,20 @@ def convert_text(elem: ET.Element, ctx: ConvertContext) -> ShapeResult | None:
     line_height_px: float | None = None
     if line_height_attr is not None:
         raw_lh = line_height_attr.strip()
-        if raw_lh.endswith('x'):
-            line_height_pct = _f(raw_lh[:-1]) * 100.0
-        elif raw_lh.endswith('%'):
-            line_height_pct = _f(raw_lh[:-1])
-        else:
-            line_height_px = _f(raw_lh.removesuffix('px'))
+        try:
+            if raw_lh.endswith('px'):
+                line_height_px = float(raw_lh[:-2])
+            elif raw_lh.endswith('x'):
+                line_height_pct = float(raw_lh[:-1]) * 100.0
+            elif raw_lh.endswith('%'):
+                line_height_pct = float(raw_lh[:-1])
+            else:
+                line_height_px = float(raw_lh)
+        except ValueError:
+            raise ValueError(
+                f'pptx:line-height must be a px length, a multiple '
+                f'("1.6x"), or a percentage ("160%"); got {raw_lh!r}'
+            ) from None
         if line_height_pct is not None:
             line_height_px = font_size * line_height_pct / 100.0
     paragraph_runs: list[list[dict[str, Any]]] | None = None
