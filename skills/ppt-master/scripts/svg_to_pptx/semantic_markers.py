@@ -7,7 +7,7 @@ authoring, validation, conversion traces, and native PPTX structure
 reconstruction. These markers are compiler hints, not a parallel content model.
 
 Usage:
-    Import from svg_quality_checker.py or svg_to_pptx internals.
+    Import from svg_to_pptx.lint or svg_to_pptx internals.
 
 Examples:
     validate_semantic_markers(root, require_page_role=True)

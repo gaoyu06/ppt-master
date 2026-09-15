@@ -500,7 +500,7 @@ SVG_CONSTRAINTS = {
         'native_data': 'skills/ppt-master/references/native-data-interface.md',
         'pptx_structure': 'skills/ppt-master/references/pptx-structure-interface.md',
     },
-    'validator': 'skills/ppt-master/scripts/svg_quality_checker.py',
+    'validator': 'skills/ppt-master/scripts/svg_lint.py',
 }
 
 

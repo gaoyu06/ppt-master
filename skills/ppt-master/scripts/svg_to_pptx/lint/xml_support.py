@@ -5,10 +5,10 @@ Provides namespace constants and compact element labels shared by quality-check
 domains.
 
 Usage:
-    Import from ``svg_quality.checker`` or another ``svg_quality`` module.
+    Import from ``svg_to_pptx.lint`` modules.
 
 Examples:
-    from svg_quality.xml_support import local_name
+    from svg_to_pptx.lint.xml_support import local_name
 
 Dependencies:
     Standard library only.

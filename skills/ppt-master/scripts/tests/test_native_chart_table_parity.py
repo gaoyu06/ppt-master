@@ -30,7 +30,7 @@ from semantic_table import expand_semantic_table_payload  # noqa: E402
 from svg_to_pptx.pptx_package.cli import (  # noqa: E402
     _native_object_projection_findings,
 )
-from svg_quality.checker import SVGQualityChecker  # noqa: E402
+from svg_to_pptx.lint import SVGQualityChecker  # noqa: E402
 
 
 FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures" / "native_projection"

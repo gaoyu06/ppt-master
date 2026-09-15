@@ -14,8 +14,8 @@ SCRIPTS_DIR = Path(__file__).resolve().parents[1]
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
-from svg_quality import checker as checker_module  # noqa: E402
-from svg_quality.checker import SVGQualityChecker  # noqa: E402
+from svg_to_pptx.lint import checker as checker_module  # noqa: E402
+from svg_to_pptx.lint import SVGQualityChecker  # noqa: E402
 
 
 SVG_NS = 'http://www.w3.org/2000/svg'

@@ -20,7 +20,7 @@ from stamp_native_fallbacks import stamp_file  # noqa: E402
 
 
 UPDATE_SPEC = SCRIPTS_DIR / "update_spec.py"
-SVG_CHECKER = SCRIPTS_DIR / "svg_quality_checker.py"
+SVG_CHECKER = SCRIPTS_DIR / "svg_lint.py"
 FALLBACK_HASH_RE = re.compile(r'data-pptx-fallback-sha256="([0-9a-f]{64})"')
 
 

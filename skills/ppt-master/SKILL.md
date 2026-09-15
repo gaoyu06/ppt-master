@@ -30,7 +30,7 @@ agent authors `svg_output/*.svg` directly, then exports.
 2. Validate:
 
    ```bash
-   python3 "${SKILL_DIR}/scripts/svg_quality_checker.py" <project> \
+   python3 "${SKILL_DIR}/scripts/svg_lint.py" <project> \
      --quick-generate --canonical-authoring --stage final --json
    ```
 
@@ -51,18 +51,57 @@ instead of silently degrading. `templates/charts|tables` hold the runtime
 visualization SVG vocabulary; `templates/schemas|scaffolds` back the
 structured-template path.
 
-## Native extension markers
+## pptx: language (preferred authoring surface)
 
-- `<filter id="fx" data-pptx-effect="shadow|glow|inner-shadow|reflection|soft-edge|blur">`
-  selects the native `a:effectLst` effect explicitly.
-- `<text>` accepts `data-pptx-vert` (`eaVert` vertical CJK etc.),
-  `data-pptx-anchor` (`t|ctr|b|just|dist`), `data-pptx-autofit`
-  (`none|norm|shape`) → `a:bodyPr`.
-- `animations.json` group effect `"path_custom"` takes
-  `effect_options.path` — an OOXML motion path in slide fractions
-  (`"M 0 0 L 0.25 0.1"`, optional `relative` boolean) → `p:animMotion`.
-- `animations.json` group field `"by_paragraph": true` expands the effect
-  into one row per `a:p` of the first text-bearing shape in the group
-  (`p:txEl`/`p:pRg` + `p:bldP build="p"` per-paragraph builds).
-  UNVERIFIED: structurally valid but does not play on PowerPoint for Mac.
+Declare `xmlns:pptx="http://pptx-svg.dev/ns/1"` on the root. These are
+compile-time checked by the exporter — wrong values fail with a precise
+error, they do not silently degrade.
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:pptx="http://pptx-svg.dev/ns/1"
+     viewBox="0 0 1280 720" lang="zh-CN">
+  <pptx:transition effect="fade" dur="0.4" advance="5"/>
+  <pptx:notes>Speaker notes for this page.</pptx:notes>
+
+  <g id="bullets" pptx:build="paragraph">
+    <text x="120" y="340" font-size="28" pptx:line-height="44">…</text>
+    <pptx:anim effect="wipe" start="click" dur="0.5" dir="right"/>
+  </g>
+
+  <g id="dot">
+    <circle cx="1000" cy="400" r="40"
+            pptx:effect="inner-shadow(blur=8,dist=4,dir=90,color=#00000066) soft-edge(rad=2)"/>
+    <pptx:anim effect="path" path="M 0 0 L 0.2 0" start="after" dur="2"/>
+    <pptx:anim effect="emphasis_grow_shrink" start="with" dur="0.8" size="1.1"/>
+  </g>
+</svg>
+```
+
+- `<pptx:anim>` — child of an animation anchor (top-level `<g>` with id).
+  Document order = pane order. Attrs: `effect` (registry name or `path`
+  for a custom `p:animMotion` via `path="…"` slide fractions +
+  `relative="false"`), `start` (`click`/`with`/`after`), `dur`, `delay`,
+  `on="<anchor id>"` (interactive click trigger), `repeat` (count or
+  seconds), `autorev`/`rewind`, `accel`/`decel`/`bounce`, `restart`,
+  `after` (`dim`/`hide`/`hide-on-next-click`/`color=#…`), `sound`, plus
+  per-effect options `dir`/`amount`/`color`/`font`/`size`.
+- `pptx:build="paragraph"` on the anchor — one animation step per `a:p`
+  of the first text-bearing shape. UNVERIFIED on PowerPoint for Mac.
+- `<pptx:transition>` — page transition; `effect` (48 names incl.
+  `morph`), `dur`, `advance` (auto-advance seconds), `sound`, and
+  per-effect options `dir`/`style`/`shape`/`origin`/`bounce`/`through-black`…
+- `<pptx:notes>` — speaker notes (pass `--with-notes` under
+  `--quick-generate`).
+- `pptx:effect` — whitespace-separated `name(k=v,…)` calls, one
+  `<a:effectLst>`; kinds `outer-shadow`/`inner-shadow`/`glow`/
+  `reflection`/`soft-edge`/`blur` with `blur`/`dist`/`rad` px, `dir`
+  degrees, `color` `#hex[a]`, `alpha` `0–1` or percent.
+- `pptx:vert`/`pptx:anchor`/`pptx:autofit` on `<text>` → `a:bodyPr`;
+  `pptx:name` → shape name; `pptx:line-height`/`pptx:space-before`/
+  `pptx:soft-break` → paragraph layout (aliases of `data-paragraph-*`).
+- `animations.json` remains supported; inline `pptx:` wins per key.
+  `data-pptx-*` is compiler-internal metadata — never authored by hand.
+
+See `SPEC.md` at the repository root for the language spec.
 

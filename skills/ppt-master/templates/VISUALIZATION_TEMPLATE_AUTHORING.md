@@ -433,7 +433,7 @@ Table；日期或持续时间决定 `x`/`width` 的排期是 `chart/gantt_chart`
 - [ ] Eligible Chart/Table 的 metadata 与可见 fallback 数据一致。
 - [ ] 默认 Shape-first 导出通过。
 - [ ] 存在 replacement marker 时，显式 native Chart/Table 导出通过。
-- [ ] `svg_quality_checker.py` 无 error；warning 已人工判断。
+- [ ] `svg_lint.py` 无 error；warning 已人工判断。
 
 ### 9.4 目录
 
@@ -449,7 +449,7 @@ Table；日期或持续时间决定 `x`/`width` 的排期是 `chart/gantt_chart`
 
 ```bash
 # 单文件 SVG 合同
-python3 skills/ppt-master/scripts/svg_quality_checker.py \
+python3 skills/ppt-master/scripts/svg_lint.py \
   skills/ppt-master/templates/<family-directory>/<key>.svg \
   --canonical-authoring
 

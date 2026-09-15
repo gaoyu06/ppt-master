@@ -33,6 +33,12 @@ from pptx_effects import (
 )
 from hyperlink_contract import svg_hyperlink_href
 from pptx_to_svg.preset_authoring import AUTHORING_ATTR, AUTHORING_VALUE
+from ..pptx_syntax import (
+    effect_call_filter_xml,
+    parse_effect_calls,
+    pptx_attr,
+    pptx_attr_or_data,
+)
 from resource_paths import (
     resolve_external_image_reference,
     svg_image_payload_error,
@@ -472,10 +478,14 @@ def project_image_errors(
 def shape_display_name(elem: ET.Element, fallback: str) -> str:
     """Name a PowerPoint object after its SVG identity when it has one.
 
-    ``data-pptx-shape-name`` wins, then the SVG ``id`` (or ``data-name``), so
-    the Selection and Animation panes show ``p08-rail-edge`` rather than
-    ``Freeform 9``; unnamed objects keep the positional fallback.
+    ``pptx:name``/``data-pptx-shape-name`` wins, then the SVG ``id`` (or
+    ``data-name``), so the Selection and Animation panes show
+    ``p08-rail-edge`` rather than ``Freeform 9``; unnamed objects keep the
+    positional fallback.
     """
+    authored_name = (pptx_attr(elem, 'name') or '').strip()
+    if authored_name:
+        return authored_name
     for attribute in ('data-pptx-shape-name', 'id', 'data-name'):
         value = (elem.get(attribute) or '').strip()
         if value:
@@ -650,6 +660,27 @@ def _imported_placeholder_xml(elem: ET.Element) -> str:
 
 def _element_effect_xml(elem: ET.Element, ctx: ConvertContext) -> str:
     """Honor an authored SVG filter before the imported native fallback."""
+    raw_spec = pptx_attr(elem, 'effect')
+    if raw_spec is not None:
+        if get_effective_filter_id(elem, ctx):
+            raise ValueError(
+                'pptx:effect cannot be combined with a filter attribute'
+            )
+        label = (
+            f'pptx:effect on '
+            f'<{elem.tag.replace(f"{{{SVG_NS}}}", "")}>'
+        )
+        opacity = get_element_opacity(elem, ctx)
+        inners: list[str] = []
+        for name, params in parse_effect_calls(raw_spec, label):
+            xml = build_effect_xml(
+                effect_call_filter_xml(name, params, label),
+                opacity,
+            ).strip()
+            if xml.startswith('<a:effectLst>') and xml.endswith('</a:effectLst>'):
+                xml = xml[len('<a:effectLst>'):-len('</a:effectLst>')]
+            inners.append(xml)
+        return f'<a:effectLst>{"".join(inners)}</a:effectLst>'
     filt_id = get_effective_filter_id(elem, ctx)
     if filt_id and filt_id in ctx.defs:
         return build_effect_xml(
@@ -3226,7 +3257,7 @@ def convert_text(elem: ET.Element, ctx: ConvertContext) -> ShapeResult | None:
     # line height. Semantic paragraphs become <a:p>; authored visual rows
     # either become <a:br/> (preserve) or join for wrapping (reflow).
     line_height_attr = (
-        elem.get('data-paragraph-line-height')
+        pptx_attr_or_data(elem, 'line-height', 'data-paragraph-line-height')
         if ctx.text_flow != TEXT_FLOW_SPLIT
         else None
     )
@@ -3258,8 +3289,16 @@ def convert_text(elem: ET.Element, ctx: ConvertContext) -> ShapeResult | None:
             visual_line_widths.append(
                 _estimate_bullet_line_width(line_runs, fonts, ctx)
             )
-            soft_break = child.get('data-paragraph-soft-break') == '1'
-            line_break = child.get('data-paragraph-line-break') == '1'
+            soft_break = (
+                pptx_attr_or_data(
+                    child, 'soft-break', 'data-paragraph-soft-break',
+                ) or ''
+            ).strip().lower() in ('1', 'true')
+            line_break = (
+                pptx_attr_or_data(
+                    child, 'line-break', 'data-paragraph-line-break',
+                ) or ''
+            ).strip().lower() in ('1', 'true')
             if line_break and paragraph_runs:
                 paragraph_runs[-1].append({'_line_break': True})
                 paragraph_runs[-1].extend(line_runs)
@@ -3290,7 +3329,9 @@ def convert_text(elem: ET.Element, ctx: ConvertContext) -> ShapeResult | None:
                 prev.extend(line_runs)
             else:
                 paragraph_runs.append(line_runs)
-                sb_attr = child.get('data-paragraph-space-before')
+                sb_attr = pptx_attr_or_data(
+                    child, 'space-before', 'data-paragraph-space-before',
+                )
                 paragraph_space_before.append(_f(sb_attr) if sb_attr else 0.0)
         if not paragraph_runs:
             paragraph_runs = None
@@ -3609,13 +3650,13 @@ def convert_text(elem: ET.Element, ctx: ConvertContext) -> ShapeResult | None:
     # instead of shrinking to glyph bounds. Reconstruct insets from the SVG
     # anchor/baseline so the visible text stays at its imported position while
     # remaining ordinary editable DrawingML text.
-    body_pr_vert = (elem.get('data-pptx-vert') or '').strip()
-    body_pr_anchor = (elem.get('data-pptx-anchor') or '').strip() or 't'
+    body_pr_vert = (pptx_attr_or_data(elem, 'vert') or '').strip()
+    body_pr_anchor = (pptx_attr_or_data(elem, 'anchor') or '').strip() or 't'
     body_pr_autofit = {
         'none': '<a:noAutofit/>',
         'norm': '<a:normAutofit/>',
         'shape': '<a:spAutoFit/>',
-    }.get((elem.get('data-pptx-autofit') or '').strip().lower())
+    }.get((pptx_attr_or_data(elem, 'autofit') or '').strip().lower())
     vert_attr = f' vert="{body_pr_vert}"' if body_pr_vert else ''
 
     if exact_text_frame is not None:

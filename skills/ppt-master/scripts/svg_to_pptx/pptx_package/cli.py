@@ -5,8 +5,10 @@ from __future__ import annotations
 import argparse
 import base64
 import binascii
+import contextlib
 import copy
 import hashlib
+import io
 import json
 import math
 import posixpath
@@ -1287,6 +1289,48 @@ def _quality_report_context(
         'summary': quality.get('summary'),
         'categories': categories if isinstance(categories, dict) else {},
     }
+
+
+def _run_release_lint(native_dir: Path, *, quick_generate: bool) -> str:
+    """Run the compiler lint pass in-process and persist the JSON report.
+
+    Returns ``passed`` or ``failed``; blocking findings are printed for
+    direct feedback. The written report keeps postflight receipt
+    validation and external tooling working unchanged.
+    """
+    from svg_to_pptx.lint import SVGLinter
+
+    linter = SVGLinter(
+        quick_generate=quick_generate,
+        canonical_authoring=True,
+    )
+    linter.scan_banner = False
+    with contextlib.redirect_stdout(io.StringIO()):
+        linter.check_directory(str(native_dir))
+        report_path = (
+            native_dir.parent / 'validation' / 'svg_quality_report.json'
+        )
+        try:
+            linter.export_json_report(
+                str(report_path), target=str(native_dir), stage='final'
+            )
+        except OSError:
+            pass
+    blocking = linter._provenance_categories()['blocking']
+    if not blocking:
+        return 'passed'
+    print(
+        f"Error: SVG lint failed for {native_dir.name}/ — "
+        f"{len(blocking)} blocking issue(s):",
+        file=sys.stderr,
+    )
+    for issue in blocking[:20]:
+        scope = issue.get('file') or issue.get('scope') or ''
+        prefix = f'{scope}: ' if scope else ''
+        print(f"  - {prefix}{issue.get('message')}", file=sys.stderr)
+    if len(blocking) > 20:
+        print(f"  … and {len(blocking) - 20} more", file=sys.stderr)
+    return 'failed'
 
 
 def _quality_gate_status(
@@ -3054,27 +3098,13 @@ Recorded narration:
         or args.source in {None, 'output'}
     ) and not compatibility_export
     if release_quality_gate:
-        source_fingerprint = _svg_source_fingerprint(native_files)
-        quality = _quality_report_context(project_path, source_fingerprint)
-        quality_gate, _ = _quality_gate_status(quality)
-        if quality_gate != 'passed':
-            export_mode = (
-                '--quick-generate'
-                if args.quick_generate
-                else 'default release export'
+        if (
+            _run_release_lint(
+                project_path / native_source_dir,
+                quick_generate=args.quick_generate,
             )
-            print(
-                f"Error: {export_mode} requires a passing final SVG quality "
-                f"report for the current {native_source_dir}/; found "
-                f"{quality_gate}.",
-                file=sys.stderr,
-            )
-            quick_flag = ' --quick-generate' if args.quick_generate else ''
-            print(
-                "Run: python3 skills/ppt-master/scripts/svg_quality_checker.py "
-                f'"{project_path}"{quick_flag} --canonical-authoring --stage final --json',
-                file=sys.stderr,
-            )
+            != 'passed'
+        ):
             return 1
 
     # Compatibility kwargs remain until the builder's old baseline-specific

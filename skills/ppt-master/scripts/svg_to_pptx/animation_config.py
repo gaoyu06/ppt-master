@@ -36,6 +36,7 @@ from slide_roster import discover_slide_svgs
 
 from .drawingml.utils import SVG_NS
 from .pptx_package.narration import AUDIO_CONTENT_TYPES
+from .pptx_syntax import is_pptx_element
 from .semantic_markers import is_static_page_frame
 
 
@@ -203,7 +204,7 @@ def scan_root_primitives(svg_path: Path) -> dict[str, str]:
     primitives: dict[str, str] = {}
     for child in root:
         tag = _tag_name(child)
-        if tag in _NON_VISUAL_TAGS or tag == 'g':
+        if is_pptx_element(child) or tag in _NON_VISUAL_TAGS or tag == 'g':
             continue
         elem_id = usable_animation_group_id(child.get('id'))
         if elem_id is None:
@@ -239,7 +240,7 @@ def scan_svg_targets(
 
     for child in root:
         tag = _tag_name(child)
-        if tag in _NON_VISUAL_TAGS:
+        if tag in _NON_VISUAL_TAGS or is_pptx_element(child):
             continue
         visual_index += 1
         if tag != 'g':

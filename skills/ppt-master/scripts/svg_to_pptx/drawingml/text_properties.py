@@ -706,10 +706,16 @@ def _diagnose_text_declaration(
     return True, None
 
 
+_PPTX_NS = 'http://pptx-svg.dev/ns/1'
 _TEXT_BODY_PR_MARKERS = {
     'data-pptx-vert': ('eaVert', 'vert', 'wordArtVert', 'wordArtVertRtl', 'horz'),
     'data-pptx-anchor': ('t', 'ctr', 'b', 'just', 'dist'),
     'data-pptx-autofit': ('none', 'norm', 'shape'),
+    f'{{{_PPTX_NS}}}vert': (
+        'eaVert', 'vert', 'wordArtVert', 'wordArtVertRtl', 'horz',
+    ),
+    f'{{{_PPTX_NS}}}anchor': ('t', 'ctr', 'b', 'just', 'dist'),
+    f'{{{_PPTX_NS}}}autofit': ('none', 'norm', 'shape'),
 }
 
 
@@ -727,15 +733,21 @@ def project_text_property_diagnostics(
             raw_marker = elem.get(marker)
             if raw_marker is None:
                 continue
+            display_marker = (
+                f'pptx:{marker.rsplit("}", 1)[-1]}'
+                if marker.startswith(f'{{{_PPTX_NS}}}')
+                else marker
+            )
             if tag != 'text':
                 diagnostics.append(TextPropertyDiagnostic(
-                    'error', label, 'attribute', marker, raw_marker,
-                    f'{label} uses {marker} on <{tag}>; it belongs on <text>',
+                    'error', label, 'attribute', display_marker, raw_marker,
+                    f'{label} uses {display_marker} on <{tag}>; '
+                    'it belongs on <text>',
                 ))
             elif raw_marker.strip() not in allowed_values:
                 diagnostics.append(TextPropertyDiagnostic(
-                    'error', label, 'attribute', marker, raw_marker,
-                    f'{label} {marker}={raw_marker!r}; expected one of '
+                    'error', label, 'attribute', display_marker, raw_marker,
+                    f'{label} {display_marker}={raw_marker!r}; expected one of '
                     + ', '.join(allowed_values),
                 ))
         direct_allowlist = {
@@ -748,6 +760,8 @@ def project_text_property_diagnostics(
         }.get(tag)
 
         for raw_name, raw in elem.attrib.items():
+            if raw_name.startswith(f'{{{_PPTX_NS}}}'):
+                continue
             name = _attribute_name(raw_name)
             if name == 'style' or name.startswith('data-'):
                 continue

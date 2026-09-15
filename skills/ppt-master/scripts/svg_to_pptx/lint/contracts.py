@@ -6,10 +6,10 @@ Each check receives an explicit XML root or source string and appends findings
 to the supplied result dictionary.
 
 Usage:
-    Import checks from ``svg_quality.svg_contracts``.
+    Import checks from ``svg_to_pptx.lint.contracts``.
 
 Examples:
-    from svg_quality.svg_contracts import check_paint_compatibility
+    from svg_to_pptx.lint.contracts import check_paint_compatibility
 
 Dependencies:
     Standard library plus local PPT Master SVG-to-PPTX modules.

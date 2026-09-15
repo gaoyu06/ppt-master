@@ -39,6 +39,7 @@ from svg_authoring_view import (
 )
 from svg_compatibility import normalize_single_child_group_filters
 
+from ..pptx_syntax import is_pptx_element
 from .context import (
     TEXT_FLOW_PRESERVE,
     TEXT_FLOW_SPLIT,
@@ -1842,6 +1843,9 @@ def convert_element(elem: ET.Element, ctx: ConvertContext) -> ShapeResult | None
             event['animation_override'] = True
         ctx.trace_events.append(event)
 
+    if is_pptx_element(elem):
+        trace('skip', reason='pptx-namespace-semantics')
+        return None
     if elem.get('data-pptx-part') == 'geometry-detail':
         trace('skip', reason='render-only-preset-geometry-detail')
         return None
@@ -1910,6 +1914,8 @@ def collect_unsupported_visuals(
     ) -> None:
         tag = _local_tag(elem)
         current = f'{path}/{tag}'
+        if is_pptx_element(elem):
+            return
         if in_defs:
             return
         if tag in _NON_VISUAL_TAGS:

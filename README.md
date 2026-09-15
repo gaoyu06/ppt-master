@@ -10,8 +10,8 @@ removed. What remains:
 - `skills/ppt-master/scripts/svg_to_pptx.py` — compile `svg_output/*.svg` into
   a native PPTX (DrawingML shapes, charts, tables, OMML formulas, transitions,
   object animations, speaker notes, narration audio)
-- `skills/ppt-master/scripts/svg_quality_checker.py` — validate the SVG
-  dialect before export
+- `skills/ppt-master/scripts/svg_lint.py` — run the compiler's advisory SVG
+  lint pass (also runs automatically at export)
 - `skills/ppt-master/scripts/pptx_to_svg.py` — import an existing PPTX back
   into the authoring SVG form (round-trip editing)
 
@@ -21,7 +21,7 @@ removed. What remains:
 pip install -r requirements.txt
 
 # project layout: <project>/svg_output/*.svg
-python3 skills/ppt-master/scripts/svg_quality_checker.py <project> \
+python3 skills/ppt-master/scripts/svg_lint.py <project> \
   --quick-generate --canonical-authoring --stage final --json
 python3 skills/ppt-master/scripts/svg_to_pptx.py <project> --quick-generate
 ```

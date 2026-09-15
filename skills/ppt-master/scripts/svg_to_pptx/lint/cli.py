@@ -4,10 +4,10 @@
 Parses the legacy command-line contract and delegates validation to the checker.
 
 Usage:
-    python3 scripts/svg_quality_checker.py <svg_file_or_project> [options]
+    python3 scripts/svg_lint.py <svg_file_or_project> [options]
 
 Examples:
-    python3 scripts/svg_quality_checker.py projects/demo --stage final --json
+    python3 scripts/svg_lint.py projects/demo --stage final --json
 
 Dependencies:
     Standard library plus local PPT Master validation modules.
@@ -19,7 +19,7 @@ from pathlib import Path
 
 from slide_roster import discover_slide_svgs
 
-from .checker import SVGQualityChecker
+from .checker import SVGLinter
 
 
 def _first_page_target(target: str) -> str:
@@ -85,7 +85,7 @@ def _page_target(target: str, page: str) -> str:
 
 
 def _default_json_report_path(
-    checker: SVGQualityChecker,
+    checker: SVGLinter,
     target: str,
     stage: str,
 ) -> Path:
@@ -109,19 +109,19 @@ def _default_json_report_path(
 
 def print_usage() -> None:
     """Print CLI usage information."""
-    print("PPT Master - SVG Quality Check Tool\n")
+    print("PPT Master - SVG lint (compiler pre-export pass)\n")
     print("Usage:")
-    print("  python3 scripts/svg_quality_checker.py <svg_file>")
-    print("  python3 scripts/svg_quality_checker.py <directory>")
-    print("  python3 scripts/svg_quality_checker.py <roundtrip-workspace> --roundtrip")
-    print("  python3 scripts/svg_quality_checker.py <workspace>/templates --template-mode")
-    print("  python3 scripts/svg_quality_checker.py --all projects")
+    print("  python3 scripts/svg_lint.py <svg_file>")
+    print("  python3 scripts/svg_lint.py <directory>")
+    print("  python3 scripts/svg_lint.py <roundtrip-workspace> --roundtrip")
+    print("  python3 scripts/svg_lint.py <workspace>/templates --template-mode")
+    print("  python3 scripts/svg_lint.py --all projects")
     print("\nExamples:")
-    print("  python3 scripts/svg_quality_checker.py projects/project/svg_output/slide_01.svg")
-    print("  python3 scripts/svg_quality_checker.py projects/project/svg_output")
-    print("  python3 scripts/svg_quality_checker.py projects/project")
-    print("  python3 scripts/svg_quality_checker.py templates/layouts/presentation_core/templates --template-mode")
-    print("  python3 scripts/svg_quality_checker.py templates/decks/中国电信/templates --template-mode")
+    print("  python3 scripts/svg_lint.py projects/project/svg_output/slide_01.svg")
+    print("  python3 scripts/svg_lint.py projects/project/svg_output")
+    print("  python3 scripts/svg_lint.py projects/project")
+    print("  python3 scripts/svg_lint.py templates/layouts/presentation_core/templates --template-mode")
+    print("  python3 scripts/svg_lint.py templates/decks/中国电信/templates --template-mode")
     print("\nOptions:")
     print("  --format <ppt169|ppt43|...>   Expected canvas format")
     print("  --stage <early|first-page|page|final>")
@@ -187,7 +187,7 @@ def main() -> None:
             "--quick-generate, or --canonical-authoring"
         )
         sys.exit(1)
-    checker = SVGQualityChecker(
+    checker = SVGLinter(
         template_mode=template_mode,
         quick_generate=quick_generate,
         canonical_authoring=canonical_authoring,

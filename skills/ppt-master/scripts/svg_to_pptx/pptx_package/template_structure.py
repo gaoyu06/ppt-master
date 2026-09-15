@@ -5,7 +5,7 @@ PPT Master - Template Structure Metadata
 Parse and validate explicit SVG metadata consumed by structured PPTX export.
 
 Usage:
-    Imported by svg_to_pptx.pptx_package.builder and svg_quality_checker.py.
+    Imported by svg_to_pptx.pptx_package.builder and svg_to_pptx.lint.
 
 Examples:
     parse_template_slides([Path("projects/demo/svg_output/01_cover.svg")])

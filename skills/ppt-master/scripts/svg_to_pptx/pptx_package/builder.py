@@ -83,6 +83,7 @@ from ..animation_config import (
     resolve_morph_pairs,
     resolve_slide_animation_config,
 )
+from ..pptx_syntax import extract_slide_semantics, merge_slide_cfg
 from ..drawingml.context import resolve_text_flow
 from ..drawingml.converter import convert_svg_to_slide_shapes
 from ..drawingml.theme_colors import (
@@ -7360,6 +7361,22 @@ def create_pptx_with_native_svg(
                         if is_layout_definition
                         else _slide_config(animation_config, svg_path.stem)
                     )
+                    slide_semantics = (
+                        None
+                        if is_layout_definition
+                        else extract_slide_semantics(
+                            ET.parse(svg_path).getroot(), svg_path.stem,
+                        )
+                    )
+                    if slide_semantics is not None:
+                        if slide_semantics.slide_cfg():
+                            slide_cfg = merge_slide_cfg(
+                                slide_cfg, slide_semantics,
+                            )
+                        if slide_semantics.notes is not None:
+                            if notes is None:
+                                notes = {}
+                            notes[svg_path.stem] = slide_semantics.notes
                     if is_layout_definition:
                         slide_transition = None
                         slide_transition_effect_options = {}
@@ -7511,6 +7528,21 @@ def create_pptx_with_native_svg(
                             else structure_trace,
                         )
                     )
+                    if (
+                        slide_semantics is not None
+                        and slide_semantics.anim_anchor_ids
+                    ):
+                        unresolved = sorted(
+                            slide_semantics.anim_anchor_ids
+                            - {str(svg_id) for _sid, svg_id in anim_targets}
+                        )
+                        if unresolved:
+                            raise ValueError(
+                                f'{svg_path.name}: <pptx:anim> target id(s) '
+                                f'{", ".join(unresolved)} do not resolve to '
+                                'animation anchors; animate a top-level <g> '
+                                'or a named root-level shape'
+                            )
                     morph_group_ids = morph_group_overrides_by_slide.get(
                         svg_path.stem,
                         set(),

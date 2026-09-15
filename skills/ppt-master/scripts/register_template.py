@@ -38,7 +38,7 @@ Usage::
 recommended for repairing index drift across many templates at once.
 
 Project-scoped Brand and Style workspaces are validated, not registered,
-through ``svg_quality_checker.py <workspace>/templates --template-mode``. That
+through ``svg_lint.py <workspace>/templates --template-mode``. That
 entry reuses :func:`validate_brand_workspace` or
 :func:`validate_style_workspace`, so each schema has one authority.
 """
@@ -1304,7 +1304,7 @@ def _resolve_spec_path(template_dir: Path, kind: str) -> Path:
 def validate_brand_workspace(template_root: str | Path) -> dict:
     """Validate a portable Brand workspace without registering it.
 
-    This is the project-scope entry used by ``svg_quality_checker.py
+    This is the project-scope entry used by ``svg_lint.py
     --template-mode``. Library registration calls the same extraction path with
     an expected directory id, so both scopes share one Brand schema authority.
     """
