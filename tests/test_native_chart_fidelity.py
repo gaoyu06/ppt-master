@@ -20,18 +20,18 @@ from svg_to_pptx.native_objects.chart_style import (  # noqa: E402
     _native_chart_chrome_warnings,
 )
 from svg_to_pptx.native_objects.chart_xml import _chart_xml  # noqa: E402
-from pptx_to_svg.chart_to_svg import (  # noqa: E402
+from svg_to_pptx.pptx_to_svg.chart_to_svg import (  # noqa: E402
     _UnsupportedChart,
     _cache_point_values,
     _category_payload,
     _numeric_cache_values,
 )
-from pptx_to_svg.emu_units import NS, Xfrm  # noqa: E402
-from pptx_to_svg.ooxml_loader import PartRef  # noqa: E402
-from pptx_to_svg.normalized_chart_svg import render_normalized_chart_svg  # noqa: E402
-from pptx_to_svg.shape_walker import GRAPHIC, ShapeNode  # noqa: E402
-from pptx_to_svg.slide_to_svg import AssemblyContext, _convert_graphic_fallback  # noqa: E402
-from svg_authoring_view import _render_projection  # noqa: E402
+from svg_to_pptx.pptx_to_svg.emu_units import NS, Xfrm  # noqa: E402
+from svg_to_pptx.pptx_to_svg.ooxml_loader import PartRef  # noqa: E402
+from svg_to_pptx.pptx_to_svg.normalized_chart_svg import render_normalized_chart_svg  # noqa: E402
+from svg_to_pptx.pptx_to_svg.shape_walker import GRAPHIC, ShapeNode  # noqa: E402
+from svg_to_pptx.pptx_to_svg.slide_to_svg import AssemblyContext, _convert_graphic_fallback  # noqa: E402
+from svg_to_pptx.svg_authoring_view import _render_projection  # noqa: E402
 
 SVG_NS = "http://www.w3.org/2000/svg"
 

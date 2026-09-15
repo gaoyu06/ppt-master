@@ -10,7 +10,7 @@ from collections.abc import Iterable
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
-from pptx_transitions import (
+from svg_to_pptx.pptx_transitions import (
     AdvanceUpdate,
     EnterUpdate,
     MAX_OOXML_UNSIGNED_INT,

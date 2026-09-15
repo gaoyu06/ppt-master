@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "svg-to-pptx"
+version = "0.1.0"
+description = "Compile SVG pages (with pptx: extensions) into editable, native PPTX decks"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+    "python-pptx>=0.6.21",
+    "XlsxWriter>=3.0.0",
+    "skia-pathops>=0.9.2",
+    "uharfbuzz>=0.50.0",
+    "Pillow>=9.0.0",
+    "lxml>=4.9.0",
+    "PyYAML>=6.0",
+    "openpyxl>=3.1.0",
+]
+
+[project.scripts]
+svg-to-pptx = "svg_to_pptx.pptx_package.cli:main"
+svg-lint = "svg_to_pptx.lint.cli:main"
+pptx-to-svg = "svg_to_pptx.pptx_to_svg.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["svg_to_pptx*"]
+
+[tool.setuptools.package-data]
+"svg_to_pptx" = [
+    "*.json",
+    "templates/**/*",
+    "pptx_shapes/data/*",
+    "drawingml/*.json",
+]

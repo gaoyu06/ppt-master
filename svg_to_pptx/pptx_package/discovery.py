@@ -6,7 +6,7 @@ import re
 import sys
 from pathlib import Path
 
-from slide_roster import discover_slide_svgs
+from svg_to_pptx.slide_roster import discover_slide_svgs
 
 
 class NotesFileReadError(RuntimeError):

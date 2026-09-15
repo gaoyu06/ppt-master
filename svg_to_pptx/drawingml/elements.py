@@ -15,7 +15,7 @@ from typing import Any
 from urllib.parse import unquote_to_bytes
 from xml.etree import ElementTree as ET
 
-from pptx_shapes import (
+from svg_to_pptx.pptx_shapes import (
     CONNECTOR_PRESET_TYPES,
     OOXML_COORDINATE_MAX,
     OOXML_COORDINATE_MIN,
@@ -24,15 +24,15 @@ from pptx_shapes import (
     load_shape_type_values,
     validate_ooxml_xfrm,
 )
-from pptx_effects import (
+from svg_to_pptx.pptx_effects import (
     EFFECT_REASON_ATTR,
     EFFECT_STATUS_ATTR,
     NATIVE_EFFECT_ATTR,
     NATIVE_EFFECT_SHA256_ATTR,
     preserved_native_effect_xml,
 )
-from hyperlink_contract import svg_hyperlink_href
-from pptx_to_svg.preset_authoring import AUTHORING_ATTR, AUTHORING_VALUE
+from svg_to_pptx.hyperlink_contract import svg_hyperlink_href
+from svg_to_pptx.pptx_to_svg.preset_authoring import AUTHORING_ATTR, AUTHORING_VALUE
 from ..pptx_syntax import (
     effect_call_filter_xml,
     parse_crop_src_rect,
@@ -40,7 +40,7 @@ from ..pptx_syntax import (
     pptx_attr,
     pptx_attr_or_data,
 )
-from resource_paths import (
+from svg_to_pptx.resource_paths import (
     resolve_external_image_reference,
     svg_image_payload_error,
 )

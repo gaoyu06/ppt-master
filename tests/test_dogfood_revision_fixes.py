@@ -17,7 +17,7 @@ SCRIPTS_DIR = Path(__file__).resolve().parents[1]
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
-from project_utils import validate_outline_roster  # noqa: E402
+from svg_to_pptx.project_utils import validate_outline_roster  # noqa: E402
 
 SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720"></svg>\n'
 

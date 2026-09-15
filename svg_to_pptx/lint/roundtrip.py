@@ -8,7 +8,7 @@ class RoundtripChecks:
 
     def check_roundtrip_workspace(self, workspace: str) -> List[Dict]:
         """Check edited text on the resolved round-trip output page roster."""
-        from authoring_roundtrip import (
+        from svg_to_pptx.authoring_roundtrip import (
             AuthoringRoundtripError,
             _generate_baseline_bundle,
             _load_current_assets,
@@ -194,11 +194,11 @@ class RoundtripChecks:
         baseline_assets,
     ) -> tuple[set[int], set[int]]:
         """Return edited and hash-unchanged source text carrier identities."""
-        from authoring_roundtrip import (
+        from svg_to_pptx.authoring_roundtrip import (
             _definition_changes,
             authoring_source_ref_is_unchanged,
         )
-        from svg_authoring_view import (
+        from svg_to_pptx.svg_authoring_view import (
             SOURCE_PROXY_ATTRIBUTE,
             SOURCE_PROXY_KIND,
             SOURCE_REF_ATTRIBUTE,
@@ -402,7 +402,7 @@ class RoundtripChecks:
         included_text_ids: set[int],
     ) -> List[str]:
         """Return resolved edited fonts that differ from the source baseline."""
-        from svg_authoring_view import SOURCE_REF_ATTRIBUTE
+        from svg_to_pptx.svg_authoring_view import SOURCE_REF_ATTRIBUTE
 
         parent_by_id = {
             id(child): parent

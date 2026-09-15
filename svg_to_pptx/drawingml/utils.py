@@ -18,20 +18,20 @@ from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
-from pptx_gradients import (
+from svg_to_pptx.pptx_gradients import (
     NATIVE_GRADIENT_ATTR,
     NATIVE_GRADIENT_PREVIEW_SHA256_ATTR,
     NATIVE_GRADIENT_SHA256_ATTR,
     preserved_native_gradient_xml,
 )
 
-from pptx_shapes import (
+from svg_to_pptx.pptx_shapes import (
     OOXML_COORDINATE_MAX,
     resolve_preset_preview_hash,
     svg_preset_preview_fingerprint,
     validate_ooxml_xfrm,
 )
-from language_tags import language_base, language_uses_rtl, normalize_language_tag
+from svg_to_pptx.language_tags import language_base, language_uses_rtl, normalize_language_tag
 
 from .context import AffineMatrix, ConvertContext, IDENTITY_MATRIX
 
@@ -3010,7 +3010,7 @@ def _is_compact_authored_preset_filter_target(elem: ET.Element) -> bool:
         or elem.get('data-pptx-part') is not None
     ):
         return False
-    from pptx_to_svg.preset_authoring import (  # Local to avoid layer coupling.
+    from svg_to_pptx.pptx_to_svg.preset_authoring import (  # Local to avoid layer coupling.
         authored_preset_encoding,
         validate_authored_preset_group,
     )

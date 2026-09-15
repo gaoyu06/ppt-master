@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 from xml.sax.saxutils import quoteattr
 
-from language_tags import normalize_language_tag
+from svg_to_pptx.language_tags import normalize_language_tag
 
 from ..drawingml.utils import (
     detect_text_lang,

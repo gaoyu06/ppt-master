@@ -13,7 +13,7 @@ SCRIPTS_DIR = Path(__file__).resolve().parents[1]
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
-from project_management.project_specs import (  # noqa: E402
+from svg_to_pptx.project_management.project_specs import (  # noqa: E402
     SCHEMA_DIR,
     default_spec_lock_forbidden,
     validate_markdown_schema,

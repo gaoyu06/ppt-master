@@ -17,7 +17,7 @@ SCRIPTS_DIR = Path(__file__).resolve().parents[1]
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
-from pptx_animations import create_sequence_timing_xml  # noqa: E402
+from svg_to_pptx.pptx_animations import create_sequence_timing_xml  # noqa: E402
 from svg_to_pptx.drawingml.context import ConvertContext  # noqa: E402
 from svg_to_pptx.drawingml.converter import convert_element  # noqa: E402
 from svg_to_pptx.native_objects import stamp_native_fallback_baseline  # noqa: E402

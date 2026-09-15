@@ -5,8 +5,8 @@ from __future__ import annotations
 import math
 from xml.etree import ElementTree as ET
 
-from pptx_shapes import validate_ooxml_line_width
-from pptx_gradients import preserved_native_gradient_xml
+from svg_to_pptx.pptx_shapes import validate_ooxml_line_width
+from svg_to_pptx.pptx_gradients import preserved_native_gradient_xml
 
 from .context import ConvertContext
 from .theme_colors import ThemeColorSpec, color_node_xml

@@ -29,8 +29,8 @@ from pathlib import Path
 from typing import Any
 from xml.etree import ElementTree as ET
 
-from native_payloads import NativePayloadError, hydrate_native_payload_refs
-from pptx_to_svg.preset_authoring import (
+from svg_to_pptx.native_payloads import NativePayloadError, hydrate_native_payload_refs
+from svg_to_pptx.pptx_to_svg.preset_authoring import (
     authored_preset_encoding,
     validate_authored_preset_group,
 )

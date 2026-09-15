@@ -31,13 +31,13 @@ from pathlib import Path
 from typing import Any
 from xml.etree import ElementTree as ET
 
-from pptx_to_svg.emu_units import Xfrm
-from pptx_to_svg.preset_authoring import (
+from svg_to_pptx.pptx_to_svg.emu_units import Xfrm
+from svg_to_pptx.pptx_to_svg.preset_authoring import (
     authored_preset_encoding,
     validate_authored_preset_group,
 )
-from pptx_to_svg.preset_registry_to_svg import render_preset_geometry
-from pptx_to_svg.preset_svg_markup import attrs_to_xml
+from svg_to_pptx.pptx_to_svg.preset_registry_to_svg import render_preset_geometry
+from svg_to_pptx.pptx_to_svg.preset_svg_markup import attrs_to_xml
 
 from .drawingml.context import AffineMatrix, IDENTITY_MATRIX
 from .drawingml.paths import (

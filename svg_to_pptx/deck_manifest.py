@@ -12,8 +12,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
-from language_tags import LanguageTagError, normalize_language_tag
-from project_utils import CANVAS_FORMATS
+from svg_to_pptx.language_tags import LanguageTagError, normalize_language_tag
+from svg_to_pptx.project_utils import CANVAS_FORMATS
 
 from .pptx_syntax import PPTX_NS
 

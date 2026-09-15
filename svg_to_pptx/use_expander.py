@@ -477,10 +477,7 @@ def expand_local_use_references_in_file(svg_path: Path) -> int:
 
 def _import_embed_icons():
     """Lazy import so svg_to_pptx doesn't hard-require svg_finalize at import time."""
-    scripts_dir = Path(__file__).resolve().parent.parent
-    if str(scripts_dir) not in sys.path:
-        sys.path.insert(0, str(scripts_dir))
-    from svg_finalize import embed_icons  # type: ignore
+    from svg_to_pptx.svg_finalize import embed_icons  # type: ignore
     return embed_icons
 
 

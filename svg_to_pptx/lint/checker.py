@@ -538,7 +538,7 @@ class SVGLinter(DialectChecks, TextChecks, TextGeometryChecks, ResourceChecks, S
                 ))
                 return self.results
             try:
-                from register_template import (
+                from svg_to_pptx.register_template import (
                     SpecParseError,
                     validate_qualified_spec_identity,
                 )
@@ -585,7 +585,7 @@ class SVGLinter(DialectChecks, TextChecks, TextGeometryChecks, ResourceChecks, S
             ]
             for spec in shadowed_deck_specs:
                 try:
-                    from register_template import (
+                    from svg_to_pptx.register_template import (
                         SpecParseError,
                         validate_shadowed_deck_spec,
                     )
@@ -629,7 +629,7 @@ class SVGLinter(DialectChecks, TextChecks, TextGeometryChecks, ResourceChecks, S
                     else spec.parent
                 )
                 try:
-                    from register_template import (
+                    from svg_to_pptx.register_template import (
                         SpecParseError,
                         validate_brand_workspace,
                         validate_style_workspace,

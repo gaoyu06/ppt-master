@@ -10,7 +10,7 @@ import sys
 from typing import Any
 from xml.etree import ElementTree as ET
 
-from pptx_shapes import validate_ooxml_xfrm
+from svg_to_pptx.pptx_shapes import validate_ooxml_xfrm
 
 from ..drawingml.utils import px_to_emu
 from ..drawingml.context import ConvertContext, ShapeResult
@@ -80,7 +80,7 @@ from .marker_attributes import (
     native_replacement_status,
 )
 from .marker_status import native_marker_status_errors
-from semantic_table import expand_semantic_table_payload
+from svg_to_pptx.semantic_table import expand_semantic_table_payload
 from .table import (
     _build_native_table,
     _native_table_warnings,

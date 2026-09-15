@@ -16,10 +16,10 @@ SCRIPTS_DIR = Path(__file__).resolve().parents[1]
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
-from stamp_native_fallbacks import stamp_file  # noqa: E402
+from svg_to_pptx.stamp_native_fallbacks import stamp_file  # noqa: E402
 
 
-UPDATE_SPEC = SCRIPTS_DIR / "update_spec.py"
+UPDATE_SPEC = ["-m", "svg_to_pptx.update_spec"]
 SVG_CHECKER = SCRIPTS_DIR / "svg_lint.py"
 FALLBACK_HASH_RE = re.compile(r'data-pptx-fallback-sha256="([0-9a-f]{64})"')
 
@@ -105,7 +105,7 @@ class UpdateSpecNativeFallbackTests(unittest.TestCase):
             dry_run = subprocess.run(
                 [
                     sys.executable,
-                    str(UPDATE_SPEC),
+                    *UPDATE_SPEC,
                     str(project),
                     "colors.accent=#8C2F1F",
                     "--dry-run",
@@ -113,6 +113,7 @@ class UpdateSpecNativeFallbackTests(unittest.TestCase):
                 check=False,
                 capture_output=True,
                 text=True,
+                cwd=SCRIPTS_DIR,
             )
             self.assertEqual(dry_run.returncode, 0, dry_run.stderr)
             self.assertIn(
@@ -125,13 +126,14 @@ class UpdateSpecNativeFallbackTests(unittest.TestCase):
             update = subprocess.run(
                 [
                     sys.executable,
-                    str(UPDATE_SPEC),
+                    *UPDATE_SPEC,
                     str(project),
                     "colors.accent=#8C2F1F",
                 ],
                 check=False,
                 capture_output=True,
                 text=True,
+                cwd=SCRIPTS_DIR,
             )
             self.assertEqual(update.returncode, 0, update.stderr)
             self.assertIn(
@@ -157,6 +159,7 @@ class UpdateSpecNativeFallbackTests(unittest.TestCase):
                 check=False,
                 capture_output=True,
                 text=True,
+                cwd=SCRIPTS_DIR,
             )
             self.assertEqual(
                 checker.returncode,

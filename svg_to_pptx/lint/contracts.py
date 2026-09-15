@@ -29,7 +29,7 @@ from .xml_support import (
 )
 
 try:
-    from pptx_effects import (
+    from svg_to_pptx.pptx_effects import (
         EFFECT_REASON_ATTR as _EFFECT_REASON_ATTR,
         EFFECT_STATUS_ATTR as _EFFECT_STATUS_ATTR,
         project_effect_status_errors as _project_effect_status_errors,

@@ -23,42 +23,37 @@ from pathlib import Path
 from urllib.parse import unquote
 from xml.etree import ElementTree as ET
 
-_SCRIPTS_DIR = Path(__file__).resolve().parents[1]
-if str(_SCRIPTS_DIR) not in sys.path:
-    sys.path.insert(0, str(_SCRIPTS_DIR))
-
-
-from authoring_roundtrip import (  # noqa: E402
+from svg_to_pptx.authoring_roundtrip import (  # noqa: E402
     AuthoringRoundtripError,
     RoundtripPage,
     is_flat_authoring_bundle,
     materialize_flat_authoring_roundtrip,
 )
-from console_encoding import configure_utf8_stdio  # noqa: E402
-from language_tags import (  # noqa: E402
+from svg_to_pptx.console_encoding import configure_utf8_stdio  # noqa: E402
+from svg_to_pptx.language_tags import (  # noqa: E402
     LanguageTagError,
     normalize_language_tag,
 )
-from native_payloads import PAYLOAD_STORE_RELATIVE_PATH  # noqa: E402
-from pptx_embedded_fonts import (  # noqa: E402
+from svg_to_pptx.native_payloads import PAYLOAD_STORE_RELATIVE_PATH  # noqa: E402
+from svg_to_pptx.pptx_embedded_fonts import (  # noqa: E402
     EmbeddedFontBundle,
     EmbeddedFontError,
     load_embedded_font_bundle,
 )
-from pptx_animations import (  # noqa: E402
+from svg_to_pptx.pptx_animations import (  # noqa: E402
     ANIMATIONS,
     animation_seconds_to_milliseconds,
     normalize_animation_effect,
     normalize_animation_trigger,
 )
-from pptx_transitions import (  # noqa: E402
+from svg_to_pptx.pptx_transitions import (  # noqa: E402
     DEFAULT_TRANSITION_DURATION,
     LEGACY_TRANSITION_KEYS,
     NATIVE_TRANSITION_KEYS,
     normalize_transition_effect_request,
     validate_seconds,
 )
-from pptx_workspace import (  # noqa: E402
+from svg_to_pptx.pptx_workspace import (  # noqa: E402
     AUTHORING_SVG_FLAT_DIR,
     ROUNDTRIP_MANIFEST_PATH,
     ROUNDTRIP_PAGE_PLAN_PATH,
@@ -72,14 +67,6 @@ from pptx_workspace import (  # noqa: E402
 )
 
 configure_utf8_stdio()
-
-if __package__ in {None, ''}:
-    import types
-
-    package = types.ModuleType('svg_to_pptx')
-    package.__path__ = [str(Path(__file__).resolve().parent)]  # type: ignore[attr-defined]
-    sys.modules.setdefault('svg_to_pptx', package)
-    __package__ = 'svg_to_pptx'
 
 from .dimensions import CANVAS_FORMATS, get_project_info
 from .discovery import NotesFileReadError, find_notes_files, find_svg_files
@@ -1667,7 +1654,7 @@ def _declared_canvas_viewbox(project_path: Path) -> str | None:
     """Return the project-lock root canvas without inferring from its name."""
     lock_path = project_path / 'spec_lock.md'
     try:
-        from update_spec import parse_lock
+        from svg_to_pptx.update_spec import parse_lock
 
         lock = parse_lock(lock_path)
     except (OSError, ValueError):
@@ -1709,7 +1696,7 @@ def _declared_primary_language(project_path: Path) -> str | None:
     """Return the canonical content language: the lock's, else the first page's root lang."""
     lock_path = project_path / 'spec_lock.md'
     try:
-        from update_spec import parse_lock
+        from svg_to_pptx.update_spec import parse_lock
 
         lock = parse_lock(lock_path)
     except (OSError, ValueError):

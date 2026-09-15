@@ -6,7 +6,7 @@ import re
 import secrets
 from xml.etree import ElementTree as ET
 
-from pptx_shapes import (
+from svg_to_pptx.pptx_shapes import (
     NATIVE_FALLBACK_SHA256_ATTR,
     svg_native_fallback_fingerprint,
 )

@@ -25,7 +25,7 @@ from xml.sax.saxutils import escape, quoteattr
 
 from pptx import Presentation
 
-from pptx_embedded_fonts import (
+from svg_to_pptx.pptx_embedded_fonts import (
     FONT_CONTENT_TYPE,
     FONT_REL_TYPE,
     PML_NS as EMBEDDED_FONT_PML_NS,
@@ -34,7 +34,7 @@ from pptx_embedded_fonts import (
     EmbeddedFontError,
     embedded_font_typefaces,
 )
-from pptx_transitions import (
+from svg_to_pptx.pptx_transitions import (
     AdvanceUpdate,
     DEFAULT_TRANSITION_DURATION,
     EnterUpdate,
@@ -51,7 +51,7 @@ from pptx_transitions import (
     validate_pptx_transition_package,
     validate_seconds,
 )
-from pptx_animations import (
+from svg_to_pptx.pptx_animations import (
     ANIMATION_TIMING_OPTION_FIELDS,
     animation_seconds_to_milliseconds,
     create_sequence_timing_xml,
@@ -63,16 +63,16 @@ from pptx_animations import (
     validate_generated_animation_xml,
     validate_pptx_animation_package,
 )
-from pptx_opc_validation import (
+from svg_to_pptx.pptx_opc_validation import (
     canonical_opc_part_path as _canonical_opc_part_path,
     resolve_internal_opc_target as _resolve_internal_opc_target,
     verify_internal_relationships,
 )
-from pptx_workspace import WorkspaceResourceSpec
-from pptx_ooxml.clone import clone_presentation_slides
-from pptx_ooxml.package import prune_unreferenced_directory_parts
-from language_tags import language_uses_rtl, office_language_tag
-from hyperlink_contract import (
+from svg_to_pptx.pptx_workspace import WorkspaceResourceSpec
+from svg_to_pptx.pptx_ooxml.clone import clone_presentation_slides
+from svg_to_pptx.pptx_ooxml.package import prune_unreferenced_directory_parts
+from svg_to_pptx.language_tags import language_uses_rtl, office_language_tag
+from svg_to_pptx.hyperlink_contract import (
     HYPERLINK_REL_TYPE,
     trigger_shape_hyperlink_errors,
 )

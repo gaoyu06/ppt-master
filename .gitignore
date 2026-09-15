@@ -185,9 +185,5 @@ PERSONAL_NOTES.md
 projects/*
 !projects/README.md
 
-# Derived template review exports (local review only; never template input)
-skills/ppt-master/templates/brands/*/exports/
-skills/ppt-master/templates/decks/*/exports/
-skills/ppt-master/templates/layouts/*/exports/
 .venv/
 examples/*/validation/

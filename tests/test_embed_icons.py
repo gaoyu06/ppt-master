@@ -12,7 +12,7 @@ SCRIPTS_DIR = Path(__file__).resolve().parents[1]
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
-from svg_finalize.embed_icons import (  # noqa: E402
+from svg_to_pptx.svg_finalize.embed_icons import (  # noqa: E402
     generate_icon_group,
     parse_use_element,
     process_svg_file,

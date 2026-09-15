@@ -17,7 +17,7 @@ import sys
 from pathlib import Path
 
 
-from slide_roster import discover_slide_svgs
+from svg_to_pptx.slide_roster import discover_slide_svgs
 
 from .checker import SVGLinter
 
@@ -241,7 +241,7 @@ def main() -> None:
             print(f"[ERROR] --stage {stage} does not support --all")
             sys.exit(1)
         base_dir = sys.argv[2] if len(sys.argv) > 2 else "projects"
-        from project_utils import find_all_projects
+        from svg_to_pptx.project_utils import find_all_projects
 
         projects = find_all_projects(base_dir)
 

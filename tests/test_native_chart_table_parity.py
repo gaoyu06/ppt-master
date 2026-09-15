@@ -26,7 +26,7 @@ from svg_to_pptx.native_objects.table import (  # noqa: E402
     _table_border_xml,
     _validate_table_payload,
 )
-from semantic_table import expand_semantic_table_payload  # noqa: E402
+from svg_to_pptx.semantic_table import expand_semantic_table_payload  # noqa: E402
 from svg_to_pptx.pptx_package.cli import (  # noqa: E402
     _native_object_projection_findings,
 )
@@ -446,7 +446,7 @@ class NativeTablePayloadRoundTripTest(unittest.TestCase):
         import xml.etree.ElementTree as ET
         from svg_to_pptx.native_objects import _validate_native_object_marker_payload
         from svg_to_pptx.native_objects.table import _build_native_table  # noqa: F401
-        from semantic_table import expand_semantic_table_payload
+        from svg_to_pptx.semantic_table import expand_semantic_table_payload
         fixture = FIXTURES_DIR / "27_business_models.svg"
         root = ET.parse(fixture).getroot()
         marker = next(

@@ -8,26 +8,40 @@ The upstream prompt workflows, design references, style presets, icon/sound
 libraries, source-document converters, image/TTS backends, and preview UIs were
 removed. What remains:
 
-- `svg_to_pptx.py` — compile `svg_output/*.svg` into a native PPTX
-  (DrawingML shapes, charts, tables, OMML formulas, transitions,
-  object animations, speaker notes)
-- `svg_lint.py` — run the compiler's advisory SVG lint pass
+- `svg-to-pptx` — compile `svg_output/*.svg` (or a `deck.xml` page list)
+  into a native PPTX (DrawingML shapes, charts, tables, OMML formulas,
+  transitions, object animations, speaker notes)
+- `svg-lint` — run the compiler's advisory SVG lint pass
   (also runs automatically at export)
-- `pptx_to_svg.py` — import an existing PPTX back into the authoring SVG
+- `pptx-to-svg` — import an existing PPTX back into the authoring SVG
   form (round-trip editing)
+
+## Install
+
+```bash
+# zero-install run straight from the repo
+uvx --from git+https://github.com/gaoyu06/ppt-master svg-to-pptx <project>
+
+# or install the CLI tools
+pipx install git+https://github.com/gaoyu06/ppt-master
+# or: pip install git+https://github.com/gaoyu06/ppt-master
+```
 
 ## Usage
 
 ```bash
-pip install -r requirements.txt
-
-# project layout: <project>/svg_output/*.svg
-python3 svg_lint.py <project> \
-  --quick-generate --canonical-authoring --stage final --json
-python3 svg_to_pptx.py <project> --quick-generate
+# project layout: <project>/svg_output/*.svg  (+ optional deck.xml)
+svg-lint <project> --quick-generate --canonical-authoring --stage final --json
+svg-to-pptx <project> --quick-generate -o out.pptx
 ```
 
-Run `svg_to_pptx.py --help` for transitions (`-t`), object animations (`-a`),
+For development from a checkout, the same commands exist as thin repo
+wrappers: `python3 svg_to_pptx.py`, `python3 svg_lint.py`,
+`python3 pptx_to_svg.py`. Internal tools are modules:
+`python3 -m svg_to_pptx.update_spec`, `python3 -m svg_to_pptx.register_template`,
+etc.
+
+Run `svg-to-pptx --help` for transitions (`-t`), object animations (`-a`),
 native charts/tables, and round-trip options.
 
 Upstream: MIT license, © 2025-2026 Hugo He (LICENSE, SPONSORS.md,

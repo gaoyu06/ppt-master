@@ -15,18 +15,8 @@ from ..canvas_contract import (
     require_consistent_project_viewboxes,
 )
 
-# Import project utility modules
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-try:
-    from project_utils import get_project_info
-    from config import CANVAS_FORMATS
-except ImportError:
-    CANVAS_FORMATS = {
-        'ppt169': {'name': 'PPT 16:9', 'dimensions': '1280×720', 'viewbox': '0 0 1280 720'},
-    }
-
-    def get_project_info(path: str) -> dict:
-        return {'format': 'unknown', 'name': Path(path).name}
+from svg_to_pptx.project_utils import get_project_info
+from svg_to_pptx.config import CANVAS_FORMATS
 
 # EMU conversion constants
 EMU_PER_INCH = 914400

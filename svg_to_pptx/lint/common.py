@@ -16,13 +16,13 @@ from typing import Dict, List, Tuple
 from urllib.parse import unquote, urlsplit
 from xml.etree import ElementTree as ET
 
-from native_payloads import NativePayloadError, hydrate_native_payload_refs
-from pptx_workspace import (
+from svg_to_pptx.native_payloads import NativePayloadError, hydrate_native_payload_refs
+from svg_to_pptx.pptx_workspace import (
     NATIVE_STRUCTURE_PATH,
     SOURCE_PPTX_PATH,
 )
-from slide_roster import discover_slide_svgs
-from svg_authoring_contract import canonical_authoring_errors
+from svg_to_pptx.slide_roster import discover_slide_svgs
+from svg_to_pptx.svg_authoring_contract import canonical_authoring_errors
 
 from . import contracts as svg_contracts
 from .xml_support import (
@@ -33,7 +33,7 @@ from .xml_support import (
 )
 
 try:
-    from project_utils import (
+    from svg_to_pptx.project_utils import (
         CANVAS_FORMATS,
         validate_communication_trace,
         validate_outline_roster,
@@ -51,7 +51,7 @@ from svg_to_pptx.canvas_contract import (
 )
 
 try:
-    from project_management.project_specs import (
+    from svg_to_pptx.project_management.project_specs import (
         parse_spec_lock as _parse_spec_lock,
         parse_spec_lock_image_value as _parse_spec_lock_image_value,
     )
@@ -127,7 +127,7 @@ except ImportError:
     _validate_dml_shape_matrix = None
 
 try:
-    from hyperlink_contract import (
+    from svg_to_pptx.hyperlink_contract import (
         SHAPE_HYPERLINK_ATTR as _SHAPE_HYPERLINK_ATTR,
         project_hyperlink_errors as _project_hyperlink_errors,
     )
@@ -193,7 +193,7 @@ except ImportError:
     _resolve_project_letter_spacings = None
 
 try:
-    from pptx_to_svg.preset_authoring import (
+    from svg_to_pptx.pptx_to_svg.preset_authoring import (
         AUTHORING_ATTR as _AUTHORING_ATTR,
         authored_preset_encoding as _authored_preset_encoding,
         validate_authored_preset_group as _validate_authored_preset_group,
@@ -206,7 +206,7 @@ except ImportError:
     _validate_authored_preset_tree = None
 
 try:
-    from pptx_shapes import (
+    from svg_to_pptx.pptx_shapes import (
         CONNECTOR_PRESET_TYPES as _CONNECTOR_PRESET_TYPES,
         resolve_preset_preview_hash as _resolve_preset_preview_hash,
         svg_preset_preview_fingerprint as _svg_preset_preview_fingerprint,
@@ -355,7 +355,7 @@ except ImportError:
     _load_theme_font_spec = None
 
 try:
-    from svg_finalize.embed_icons import (
+    from svg_to_pptx.svg_finalize.embed_icons import (
         resolve_icon_path as _resolve_icon_path,
         suggest_icon_name as _suggest_icon_name,
     )
@@ -364,7 +364,7 @@ except ImportError:
     _suggest_icon_name = None
 
 try:
-    from resource_paths import (
+    from svg_to_pptx.resource_paths import (
         SVG_WORK_DIR_NAMES as _SVG_WORK_DIR_NAMES,
         icon_dir_for_svg as _icon_dir_for_svg,
         project_root_for_svg_path as _project_root_for_svg_path,

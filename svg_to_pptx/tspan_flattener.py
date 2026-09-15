@@ -32,11 +32,8 @@ from xml.etree import ElementTree as ET
 
 
 def _flatten_module():
-    """Load the shared on-disk flattener after exposing the scripts root."""
-    scripts_dir = Path(__file__).resolve().parent.parent
-    if str(scripts_dir) not in sys.path:
-        sys.path.insert(0, str(scripts_dir))
-    from svg_finalize import flatten_tspan  # type: ignore
+    """Load the shared on-disk flattener lazily to avoid an import cycle."""
+    from svg_to_pptx.svg_finalize import flatten_tspan  # type: ignore
     return flatten_tspan
 
 

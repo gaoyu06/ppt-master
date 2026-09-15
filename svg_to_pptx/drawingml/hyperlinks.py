@@ -20,7 +20,7 @@ from __future__ import annotations
 
 import re
 
-from hyperlink_contract import (
+from svg_to_pptx.hyperlink_contract import (
     HYPERLINK_REL_TYPE,
     SLIDE_JUMP_ACTION,
     SLIDE_REL_TYPE,

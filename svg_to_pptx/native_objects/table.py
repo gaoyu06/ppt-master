@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from typing import Any
 from xml.etree import ElementTree as ET
 
-from semantic_table import expand_semantic_table_payload
+from svg_to_pptx.semantic_table import expand_semantic_table_payload
 
 from .marker_attributes import native_import_source
 

@@ -12,13 +12,13 @@ from pathlib import Path
 from typing import Any
 from xml.etree import ElementTree as ET
 
-from native_payloads import NativePayloadError, hydrate_native_payload_refs
-from hyperlink_contract import (
+from svg_to_pptx.native_payloads import NativePayloadError, hydrate_native_payload_refs
+from svg_to_pptx.hyperlink_contract import (
     SHAPE_HYPERLINK_ATTR,
     project_hyperlink_errors,
     svg_hyperlink_href,
 )
-from pptx_shapes import (
+from svg_to_pptx.pptx_shapes import (
     DRAWINGML_NS,
     UnknownPresetShapeError,
     has_relationship_attributes,
@@ -27,17 +27,17 @@ from pptx_shapes import (
     svg_text_fingerprint,
     validate_ooxml_xfrm,
 )
-from pptx_effects import project_effect_status_errors, txbody_has_run_effects
-from pptx_to_svg.preset_authoring import (
+from svg_to_pptx.pptx_effects import project_effect_status_errors, txbody_has_run_effects
+from svg_to_pptx.pptx_to_svg.preset_authoring import (
     materialize_compact_authored_preset_tree,
     validate_authored_preset_tree,
 )
-from resource_paths import icon_dir_for_project
-from svg_authoring_view import (
+from svg_to_pptx.resource_paths import icon_dir_for_project
+from svg_to_pptx.svg_authoring_view import (
     SEMANTIC_OBJECT_ATTRIBUTE,
     SEMANTIC_SHAPE_KIND,
 )
-from svg_compatibility import normalize_single_child_group_filters
+from svg_to_pptx.svg_compatibility import normalize_single_child_group_filters
 
 from ..pptx_syntax import is_pptx_element, normalize_language_attrs, pptx_attr
 from .context import (

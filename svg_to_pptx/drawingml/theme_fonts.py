@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
-from language_tags import language_base, language_uses_rtl
+from svg_to_pptx.language_tags import language_base, language_uses_rtl
 
 from .utils import _explicit_language_script, font_px_to_hpt, parse_font_family
 
