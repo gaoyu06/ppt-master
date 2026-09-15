@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:pptx="http://pptx-svg.dev/ns/1"
+     viewBox="0 0 1280 720">
+  <!-- P6 验证：advance 自动翻页(5s) + repeat/autorev + 触发器 on= 另一个锚点 -->
+  <pptx:transition effect="zoom" dur="0.5" advance="5"/>
+  <pptx:notes>收尾页：本页 5 秒后应自动结束放映；方块应来回脉冲三次。</pptx:notes>
+
+  <rect width="1280" height="720" fill="#1D3557"/>
+  <text x="80" y="300" font-size="56" fill="#FFF" font-family="Arial"
+        pptx:effect="outer-shadow(blur=8,dist=4,dir=90,color=#00000066)">验收完成</text>
+  <text x="80" y="380" font-size="22" fill="#A8DADC" font-family="Arial">deck.xml：本页由 manifest 排序（pages/ 非 svg_output/）；dc:title/lang 已写入 core.xml</text>
+
+  <g id="pulse-box">
+    <rect x="980" y="260" width="140" height="140" rx="14" fill="#E63946"/>
+    <pptx:anim effect="emphasis_grow_shrink" start="click" dur="0.6"
+               size="1.2" repeat="3" autorev="true"/>
+  </g>
+</svg>

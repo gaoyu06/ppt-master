@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:pptx="http://pptx-svg.dev/ns/1"
+     viewBox="0 0 1280 720">
+  <!-- P5 验证：pptx:data(chart+table→graphicFrame) + pptx:formula(OMML)；
+       导出需 native-charts-and-tables 开关，否则回退为 SVG 预览形状 -->
+  <pptx:transition effect="fade" dur="0.4"/>
+  <pptx:notes>数据页：图表/表格应是原生可编辑对象；公式应是可编辑 OMML 而非图片。</pptx:notes>
+
+  <rect width="1280" height="720" fill="#FFFFFF"/>
+  <text x="80" y="80" font-size="36" fill="#1D3557" font-family="Arial">原生对象验收</text>
+
+  <g id="sales-chart" pptx:name="季度销售图"
+     pptx:data="{&quot;kind&quot;:&quot;chart&quot;,&quot;type&quot;:&quot;bar&quot;,&quot;name&quot;:&quot;季度销售&quot;,&quot;categories&quot;:[&quot;Q1&quot;,&quot;Q2&quot;,&quot;Q3&quot;,&quot;Q4&quot;],&quot;series&quot;:[{&quot;name&quot;:&quot;收入&quot;,&quot;values&quot;:[120,190,160,240]},{&quot;name&quot;:&quot;成本&quot;,&quot;values&quot;:[80,110,95,140]}],&quot;x&quot;:80,&quot;y&quot;:130,&quot;width&quot;:540,&quot;height&quot;:320}">
+    <!-- 可见预览：JSON 权威时仅作展示 -->
+    <rect x="80" y="130" width="540" height="320" fill="#F1FAEE" stroke="#457B9D"/>
+    <text x="240" y="290" font-size="20" fill="#457B9D" font-family="Arial">[柱状图预览]</text>
+  </g>
+
+  <g id="kpi-table" pptx:name="指标表"
+     pptx:data="{&quot;kind&quot;:&quot;table&quot;,&quot;schema&quot;:&quot;ppt-master.semantic-table.v2&quot;,&quot;name&quot;:&quot;指标表&quot;,&quot;header_rows&quot;:1,&quot;column_widths&quot;:[200,160,160],&quot;columns&quot;:[&quot;指标&quot;,&quot;Q3&quot;,&quot;Q4&quot;],&quot;rows&quot;:[[&quot;收入&quot;,&quot;160&quot;,&quot;240&quot;],[&quot;成本&quot;,&quot;95&quot;,&quot;140&quot;],[&quot;利润率&quot;,&quot;41%&quot;,&quot;42%&quot;]],&quot;x&quot;:680,&quot;y&quot;:130,&quot;width&quot;:520,&quot;height&quot;:200}">
+    <rect x="680" y="130" width="520" height="200" fill="#FFF" stroke="#999"/>
+    <text x="830" y="240" font-size="20" fill="#666" font-family="Arial">[表格预览]</text>
+  </g>
+
+  <text x="80" y="520" font-size="28" fill="#333" font-family="Arial"
+        pptx:name="公式">勾股定理：</text>
+  <text x="80" y="580" font-size="28" fill="#333" font-family="Arial"
+        pptx:formula="a^{2} + b^{2} = c^{2}">a²+b²=c²</text>
+
+  <text x="80" y="650" font-size="18" fill="#666" font-family="Arial">
+    检查：右侧 chart/table 应为 graphicFrame 可双击编辑；下行公式应含 m:oMath
+  </text>
+</svg>

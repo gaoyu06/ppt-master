@@ -1,0 +1,735 @@
+{
+  "schema": "ppt-master.svg-quality-report.v1",
+  "stage": "final",
+  "target": "/Users/apple/dev/ppt/examples/showcase/pages",
+  "source_fingerprint": {
+    "algorithm": "sha256",
+    "digest": "6fbc70b7d1d5a74a46805f7fef53d39e891a77cc325df9f87de31307d5120c70",
+    "file_count": 6,
+    "files": [
+      {
+        "file": "01-cover.svg",
+        "sha256": "05e961ee74781a5fb92c29bf0bd27b86426676ba93fc5b19fc566cce6a258758"
+      },
+      {
+        "file": "02-text.svg",
+        "sha256": "b8a40eceae897b349691210e6aacf218d41a6f12d08ae6898e0b9d43a7d511f8"
+      },
+      {
+        "file": "03-effects.svg",
+        "sha256": "e797d6bd8c01a2618648e419a23392e7880cfdabff27da0b48a10b19a273d817"
+      },
+      {
+        "file": "04-media.svg",
+        "sha256": "a6305c7a7219f003a85138515024ae100facad39347cfc4b13fbdbf6cf6078d6"
+      },
+      {
+        "file": "05-data.svg",
+        "sha256": "96c701b4c136752589cbbe768c8d1a4209bf266aefd327bed51b559959aea1bb"
+      },
+      {
+        "file": "06-end.svg",
+        "sha256": "388e2ee8a3aadcf939f976072528ec0cd83c3fe2cac03c5e299d21ab4dc5c328"
+      }
+    ]
+  },
+  "summary": {
+    "total": 6,
+    "passed": 0,
+    "warnings": 6,
+    "errors": 0
+  },
+  "issue_types": {},
+  "categories": {
+    "blocking": {
+      "count": 0,
+      "issues": []
+    },
+    "introduced": {
+      "count": 50,
+      "issues": [
+        {
+          "file": "01-cover.svg",
+          "message": "Noncanonical compact authoring: SVG element <transition> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "01-cover.svg",
+          "message": "Noncanonical compact authoring: SVG element <notes> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "01-cover.svg",
+          "message": "Noncanonical compact authoring: SVG element <anim> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "01-cover.svg",
+          "message": "Noncanonical compact authoring: SVG element <anim> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "01-cover.svg",
+          "message": "Noncanonical compact authoring: SVG element <anim> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "01-cover.svg",
+          "message": "Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "01-cover.svg",
+          "message": "Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (3 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Arial'; text[9]:font-family 'Arial' -> None; text[12]:font-family 'Arial' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "01-cover.svg",
+          "message": "Reference SVG: detected 3 visible root-level <g> module(s) without explicit data-pptx-bounds (<g id=\"hero-dot\">; <g id=\"cover-title\">; <g id=\"cover-sub\">); every final-page/template root <g> other than a compact authored-preset atom declares its root-coordinate layout subcanvas even when it also carries native coordinates"
+        },
+        {
+          "file": "02-text.svg",
+          "message": "Noncanonical compact authoring: SVG element <transition> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "02-text.svg",
+          "message": "Noncanonical compact authoring: SVG element <notes> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "02-text.svg",
+          "message": "Noncanonical compact authoring: SVG element <anim> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "02-text.svg",
+          "message": "Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "02-text.svg",
+          "message": "Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (4 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Arial'; text[6]:font-family 'Arial' -> None; text[7]:font-family 'Arial' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "02-text.svg",
+          "message": "Reference SVG: detected 1 visible root-level <g> module(s) without explicit data-pptx-bounds (<g id=\"bullets\">); every final-page/template root <g> other than a compact authored-preset atom declares its root-coordinate layout subcanvas even when it also carries native coordinates"
+        },
+        {
+          "file": "03-effects.svg",
+          "message": "Noncanonical compact authoring: SVG element <transition> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "03-effects.svg",
+          "message": "Noncanonical compact authoring: SVG element <notes> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "03-effects.svg",
+          "message": "Noncanonical compact authoring: SVG element <anim> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "03-effects.svg",
+          "message": "Noncanonical compact authoring: SVG element <anim> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "03-effects.svg",
+          "message": "Noncanonical compact authoring: SVG element <anim> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "03-effects.svg",
+          "message": "Noncanonical compact authoring: SVG element <anim> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "03-effects.svg",
+          "message": "Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "03-effects.svg",
+          "message": "Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (8 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Arial'; text[5]:font-family 'Arial' -> None; text[8]:font-family 'Arial' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "03-effects.svg",
+          "message": "Recommendation: fill='#333' is converter-compatible in 2 location(s) (<text> attribute); generated SVG should prefer fill=\"#333333\". No change is required for export."
+        },
+        {
+          "file": "03-effects.svg",
+          "message": "Recommendation: fill='#FFF' is converter-compatible in 4 location(s) (<text> attribute); generated SVG should prefer fill=\"#FFFFFF\". No change is required for export."
+        },
+        {
+          "file": "03-effects.svg",
+          "message": "Reference SVG: detected 6 visible root-level <g> module(s) without explicit data-pptx-bounds (<g id=\"card-outer\">; <g id=\"card-inner\">; <g id=\"card-glow\">; +3 more); every final-page/template root <g> other than a compact authored-preset atom declares its root-coordinate layout subcanvas even when it also carries native coordinates"
+        },
+        {
+          "file": "04-media.svg",
+          "message": "Noncanonical compact authoring: SVG element <transition> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "04-media.svg",
+          "message": "Noncanonical compact authoring: SVG element <notes> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "04-media.svg",
+          "message": "Noncanonical compact authoring: SVG element <anim> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "04-media.svg",
+          "message": "Noncanonical compact authoring: SVG element <anim> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "04-media.svg",
+          "message": "Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "04-media.svg",
+          "message": "Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (5 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Arial'; text[5]:font-family 'Arial' -> None; text[9]:font-family 'Arial' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "04-media.svg",
+          "message": "Recommendation: fill='#666' is converter-compatible in 1 location(s) (<text> attribute); generated SVG should prefer fill=\"#666666\". No change is required for export."
+        },
+        {
+          "file": "04-media.svg",
+          "message": "Recommendation: fill='#FFF' is converter-compatible in 2 location(s) (<text> attribute); generated SVG should prefer fill=\"#FFFFFF\". No change is required for export."
+        },
+        {
+          "file": "04-media.svg",
+          "message": "Reference SVG: detected 3 visible root-level <g> module(s) without explicit data-pptx-bounds (<g id=\"btn-trigger\">; <g id=\"mover\">; <g id=\"vanisher\">); every final-page/template root <g> other than a compact authored-preset atom declares its root-coordinate layout subcanvas even when it also carries native coordinates"
+        },
+        {
+          "file": "05-data.svg",
+          "message": "Noncanonical compact authoring: SVG element <transition> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "05-data.svg",
+          "message": "Noncanonical compact authoring: SVG element <notes> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "05-data.svg",
+          "message": "Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "05-data.svg",
+          "message": "Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (7 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Arial'; text[5]:font-family 'Arial' -> None; text[8]:font-family 'Arial' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "05-data.svg",
+          "message": "Recommendation: fill='#333' is converter-compatible in 2 location(s) (<text> attribute); generated SVG should prefer fill=\"#333333\". No change is required for export."
+        },
+        {
+          "file": "05-data.svg",
+          "message": "Recommendation: fill='#666' is converter-compatible in 2 location(s) (<text> attribute); generated SVG should prefer fill=\"#666666\". No change is required for export."
+        },
+        {
+          "file": "05-data.svg",
+          "message": "Recommendation: fill='#FFF' is converter-compatible in 1 location(s) (<rect> attribute); generated SVG should prefer fill=\"#FFFFFF\". No change is required for export."
+        },
+        {
+          "file": "05-data.svg",
+          "message": "Recommendation: stroke='#999' is converter-compatible in 1 location(s) (<rect> attribute); generated SVG should prefer stroke=\"#999999\". No change is required for export."
+        },
+        {
+          "file": "05-data.svg",
+          "message": "Reference SVG: detected 2 visible root-level <g> module(s) without explicit data-pptx-bounds (<g id=\"sales-chart\">; <g id=\"kpi-table\">); every final-page/template root <g> other than a compact authored-preset atom declares its root-coordinate layout subcanvas even when it also carries native coordinates"
+        },
+        {
+          "file": "06-end.svg",
+          "message": "Noncanonical compact authoring: SVG element <transition> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "06-end.svg",
+          "message": "Noncanonical compact authoring: SVG element <notes> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "06-end.svg",
+          "message": "Noncanonical compact authoring: SVG element <anim> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "06-end.svg",
+          "message": "Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "06-end.svg",
+          "message": "Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (3 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Arial'; text[5]:font-family 'Arial' -> None; text[6]:font-family 'Arial' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)"
+        },
+        {
+          "file": "06-end.svg",
+          "message": "Recommendation: fill='#FFF' is converter-compatible in 1 location(s) (<text> attribute); generated SVG should prefer fill=\"#FFFFFF\". No change is required for export."
+        },
+        {
+          "file": "06-end.svg",
+          "message": "Reference SVG: detected 1 visible root-level <g> module(s) without explicit data-pptx-bounds (<g id=\"pulse-box\">); every final-page/template root <g> other than a compact authored-preset atom declares its root-coordinate layout subcanvas even when it also carries native coordinates"
+        }
+      ]
+    },
+    "inherited": {
+      "count": 0,
+      "issues": []
+    },
+    "source-import": {
+      "count": 0,
+      "summary": {
+        "warning_count": 0,
+        "by_code": {}
+      }
+    }
+  },
+  "drift": {
+    "colors": {},
+    "fonts": {},
+    "sizes": {}
+  },
+  "carrier_receipt": {
+    "scope": "informational-not-a-quota",
+    "pages": 6,
+    "totals": {
+      "text_elements": 24,
+      "image_placements": 1,
+      "icons": 0,
+      "svg_geometry_elements": 20,
+      "preset_shapes": 0,
+      "page_frame_elements": 0,
+      "marker_uses": 0,
+      "inline_emphasis_runs": 0,
+      "gradient_uses": 0,
+      "filter_uses": 0,
+      "text_effects": 0
+    },
+    "pages_with": {
+      "images": 1,
+      "icons": 0,
+      "presets": 0,
+      "charts": 1,
+      "tables": 1,
+      "formulas": 1,
+      "inline_emphasis_runs": 0,
+      "gradient_uses": 0,
+      "filter_uses": 0,
+      "text_effects": 0
+    },
+    "relationship_pages": null,
+    "geometry_elements": {
+      "circle": 2,
+      "ellipse": 0,
+      "line": 0,
+      "path": 0,
+      "polygon": 0,
+      "polyline": 0,
+      "rect": 18
+    },
+    "preset_names": {},
+    "native_objects": {
+      "chart": 1,
+      "formula_block": 0,
+      "formula_inline": 1,
+      "other": 0,
+      "table": 1
+    },
+    "image_page_max_frame_share_range": [
+      0.1302,
+      0.1302
+    ]
+  },
+  "project_issues": {
+    "template": [],
+    "animation": [],
+    "communication_trace": [],
+    "pptx_structure": []
+  },
+  "files": [
+    {
+      "file": "01-cover.svg",
+      "path": "examples/showcase/pages/01-cover.svg",
+      "exists": true,
+      "errors": [],
+      "warnings": [
+        "Noncanonical compact authoring: SVG element <transition> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: SVG element <notes> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: SVG element <anim> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: SVG element <anim> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: SVG element <anim> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (3 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Arial'; text[9]:font-family 'Arial' -> None; text[12]:font-family 'Arial' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Reference SVG: detected 3 visible root-level <g> module(s) without explicit data-pptx-bounds (<g id=\"hero-dot\">; <g id=\"cover-title\">; <g id=\"cover-sub\">); every final-page/template root <g> other than a compact authored-preset atom declares its root-coordinate layout subcanvas even when it also carries native coordinates"
+      ],
+      "info": {
+        "viewbox": "0 0 1280 720",
+        "carrier_receipt": {
+          "text_elements": 2,
+          "images": {
+            "placements": 0,
+            "files": [],
+            "max_frame_share": 0.0
+          },
+          "icons": 0,
+          "effects": {
+            "inline_emphasis_runs": 0,
+            "gradient_uses": 0,
+            "filter_uses": 0,
+            "text_effects": 0
+          },
+          "geometry": {
+            "svg_elements": {
+              "rect": 1,
+              "circle": 1,
+              "ellipse": 0,
+              "line": 0,
+              "polyline": 0,
+              "polygon": 0,
+              "path": 0
+            },
+            "preset_shapes": 0,
+            "preset_names": {},
+            "page_frame_elements": 0,
+            "marker_uses": {
+              "start": 0,
+              "mid": 0,
+              "end": 0
+            }
+          },
+          "native_objects": {
+            "chart": 0,
+            "table": 0,
+            "formula_block": 0,
+            "formula_inline": 0,
+            "other": 0
+          }
+        },
+        "fonts": [
+          "Arial"
+        ],
+        "text_elements": 2,
+        "tspan_elements": 0
+      },
+      "passed": true,
+      "source_sha256": "05e961ee74781a5fb92c29bf0bd27b86426676ba93fc5b19fc566cce6a258758"
+    },
+    {
+      "file": "02-text.svg",
+      "path": "examples/showcase/pages/02-text.svg",
+      "exists": true,
+      "errors": [],
+      "warnings": [
+        "Noncanonical compact authoring: SVG element <transition> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: SVG element <notes> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: SVG element <anim> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (4 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Arial'; text[6]:font-family 'Arial' -> None; text[7]:font-family 'Arial' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Reference SVG: detected 1 visible root-level <g> module(s) without explicit data-pptx-bounds (<g id=\"bullets\">); every final-page/template root <g> other than a compact authored-preset atom declares its root-coordinate layout subcanvas even when it also carries native coordinates"
+      ],
+      "info": {
+        "viewbox": "0 0 1280 720",
+        "carrier_receipt": {
+          "text_elements": 3,
+          "images": {
+            "placements": 0,
+            "files": [],
+            "max_frame_share": 0.0
+          },
+          "icons": 0,
+          "effects": {
+            "inline_emphasis_runs": 0,
+            "gradient_uses": 0,
+            "filter_uses": 0,
+            "text_effects": 0
+          },
+          "geometry": {
+            "svg_elements": {
+              "rect": 2,
+              "circle": 0,
+              "ellipse": 0,
+              "line": 0,
+              "polyline": 0,
+              "polygon": 0,
+              "path": 0
+            },
+            "preset_shapes": 0,
+            "preset_names": {},
+            "page_frame_elements": 0,
+            "marker_uses": {
+              "start": 0,
+              "mid": 0,
+              "end": 0
+            }
+          },
+          "native_objects": {
+            "chart": 0,
+            "table": 0,
+            "formula_block": 0,
+            "formula_inline": 0,
+            "other": 0
+          }
+        },
+        "fonts": [
+          "Arial"
+        ],
+        "text_elements": 3,
+        "tspan_elements": 6
+      },
+      "passed": true,
+      "source_sha256": "b8a40eceae897b349691210e6aacf218d41a6f12d08ae6898e0b9d43a7d511f8"
+    },
+    {
+      "file": "03-effects.svg",
+      "path": "examples/showcase/pages/03-effects.svg",
+      "exists": true,
+      "errors": [],
+      "warnings": [
+        "Noncanonical compact authoring: SVG element <transition> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: SVG element <notes> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: SVG element <anim> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: SVG element <anim> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: SVG element <anim> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: SVG element <anim> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (8 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Arial'; text[5]:font-family 'Arial' -> None; text[8]:font-family 'Arial' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Recommendation: fill='#333' is converter-compatible in 2 location(s) (<text> attribute); generated SVG should prefer fill=\"#333333\". No change is required for export.",
+        "Recommendation: fill='#FFF' is converter-compatible in 4 location(s) (<text> attribute); generated SVG should prefer fill=\"#FFFFFF\". No change is required for export.",
+        "Reference SVG: detected 6 visible root-level <g> module(s) without explicit data-pptx-bounds (<g id=\"card-outer\">; <g id=\"card-inner\">; <g id=\"card-glow\">; +3 more); every final-page/template root <g> other than a compact authored-preset atom declares its root-coordinate layout subcanvas even when it also carries native coordinates"
+      ],
+      "info": {
+        "viewbox": "0 0 1280 720",
+        "carrier_receipt": {
+          "text_elements": 7,
+          "images": {
+            "placements": 0,
+            "files": [],
+            "max_frame_share": 0.0
+          },
+          "icons": 0,
+          "effects": {
+            "inline_emphasis_runs": 0,
+            "gradient_uses": 0,
+            "filter_uses": 0,
+            "text_effects": 0
+          },
+          "geometry": {
+            "svg_elements": {
+              "rect": 7,
+              "circle": 0,
+              "ellipse": 0,
+              "line": 0,
+              "polyline": 0,
+              "polygon": 0,
+              "path": 0
+            },
+            "preset_shapes": 0,
+            "preset_names": {},
+            "page_frame_elements": 0,
+            "marker_uses": {
+              "start": 0,
+              "mid": 0,
+              "end": 0
+            }
+          },
+          "native_objects": {
+            "chart": 0,
+            "table": 0,
+            "formula_block": 0,
+            "formula_inline": 0,
+            "other": 0
+          }
+        },
+        "fonts": [
+          "Arial"
+        ],
+        "text_elements": 7,
+        "tspan_elements": 0
+      },
+      "passed": true,
+      "source_sha256": "e797d6bd8c01a2618648e419a23392e7880cfdabff27da0b48a10b19a273d817"
+    },
+    {
+      "file": "04-media.svg",
+      "path": "examples/showcase/pages/04-media.svg",
+      "exists": true,
+      "errors": [],
+      "warnings": [
+        "Noncanonical compact authoring: SVG element <transition> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: SVG element <notes> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: SVG element <anim> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: SVG element <anim> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (5 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Arial'; text[5]:font-family 'Arial' -> None; text[9]:font-family 'Arial' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Recommendation: fill='#666' is converter-compatible in 1 location(s) (<text> attribute); generated SVG should prefer fill=\"#666666\". No change is required for export.",
+        "Recommendation: fill='#FFF' is converter-compatible in 2 location(s) (<text> attribute); generated SVG should prefer fill=\"#FFFFFF\". No change is required for export.",
+        "Reference SVG: detected 3 visible root-level <g> module(s) without explicit data-pptx-bounds (<g id=\"btn-trigger\">; <g id=\"mover\">; <g id=\"vanisher\">); every final-page/template root <g> other than a compact authored-preset atom declares its root-coordinate layout subcanvas even when it also carries native coordinates"
+      ],
+      "info": {
+        "viewbox": "0 0 1280 720",
+        "carrier_receipt": {
+          "text_elements": 4,
+          "images": {
+            "placements": 1,
+            "files": [
+              "grid.png"
+            ],
+            "max_frame_share": 0.1302
+          },
+          "icons": 0,
+          "effects": {
+            "inline_emphasis_runs": 0,
+            "gradient_uses": 0,
+            "filter_uses": 0,
+            "text_effects": 0
+          },
+          "geometry": {
+            "svg_elements": {
+              "rect": 3,
+              "circle": 1,
+              "ellipse": 0,
+              "line": 0,
+              "polyline": 0,
+              "polygon": 0,
+              "path": 0
+            },
+            "preset_shapes": 0,
+            "preset_names": {},
+            "page_frame_elements": 0,
+            "marker_uses": {
+              "start": 0,
+              "mid": 0,
+              "end": 0
+            }
+          },
+          "native_objects": {
+            "chart": 0,
+            "table": 0,
+            "formula_block": 0,
+            "formula_inline": 0,
+            "other": 0
+          }
+        },
+        "fonts": [
+          "Arial"
+        ],
+        "text_elements": 4,
+        "tspan_elements": 0
+      },
+      "passed": true,
+      "source_sha256": "a6305c7a7219f003a85138515024ae100facad39347cfc4b13fbdbf6cf6078d6"
+    },
+    {
+      "file": "05-data.svg",
+      "path": "examples/showcase/pages/05-data.svg",
+      "exists": true,
+      "errors": [],
+      "warnings": [
+        "Noncanonical compact authoring: SVG element <transition> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: SVG element <notes> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (7 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Arial'; text[5]:font-family 'Arial' -> None; text[8]:font-family 'Arial' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Recommendation: fill='#333' is converter-compatible in 2 location(s) (<text> attribute); generated SVG should prefer fill=\"#333333\". No change is required for export.",
+        "Recommendation: fill='#666' is converter-compatible in 2 location(s) (<text> attribute); generated SVG should prefer fill=\"#666666\". No change is required for export.",
+        "Recommendation: fill='#FFF' is converter-compatible in 1 location(s) (<rect> attribute); generated SVG should prefer fill=\"#FFFFFF\". No change is required for export.",
+        "Recommendation: stroke='#999' is converter-compatible in 1 location(s) (<rect> attribute); generated SVG should prefer stroke=\"#999999\". No change is required for export.",
+        "Reference SVG: detected 2 visible root-level <g> module(s) without explicit data-pptx-bounds (<g id=\"sales-chart\">; <g id=\"kpi-table\">); every final-page/template root <g> other than a compact authored-preset atom declares its root-coordinate layout subcanvas even when it also carries native coordinates"
+      ],
+      "info": {
+        "viewbox": "0 0 1280 720",
+        "carrier_receipt": {
+          "text_elements": 6,
+          "images": {
+            "placements": 0,
+            "files": [],
+            "max_frame_share": 0.0
+          },
+          "icons": 0,
+          "effects": {
+            "inline_emphasis_runs": 0,
+            "gradient_uses": 0,
+            "filter_uses": 0,
+            "text_effects": 0
+          },
+          "geometry": {
+            "svg_elements": {
+              "rect": 3,
+              "circle": 0,
+              "ellipse": 0,
+              "line": 0,
+              "polyline": 0,
+              "polygon": 0,
+              "path": 0
+            },
+            "preset_shapes": 0,
+            "preset_names": {},
+            "page_frame_elements": 0,
+            "marker_uses": {
+              "start": 0,
+              "mid": 0,
+              "end": 0
+            }
+          },
+          "native_objects": {
+            "chart": 1,
+            "table": 1,
+            "formula_block": 0,
+            "formula_inline": 1,
+            "other": 0
+          }
+        },
+        "fonts": [
+          "Arial"
+        ],
+        "text_elements": 6,
+        "tspan_elements": 0
+      },
+      "passed": true,
+      "source_sha256": "96c701b4c136752589cbbe768c8d1a4209bf266aefd327bed51b559959aea1bb"
+    },
+    {
+      "file": "06-end.svg",
+      "path": "examples/showcase/pages/06-end.svg",
+      "exists": true,
+      "errors": [],
+      "warnings": [
+        "Noncanonical compact authoring: SVG element <transition> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: SVG element <notes> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: SVG element <anim> exits the standard SVG namespace (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: Visible text requires one direct root font-family default; semantic groups and text elements keep only real overrides (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Noncanonical compact authoring: Authoring SVG contains noncanonical or redundant inherited style declarations (3 change(s)); examples (group:attr None -> value hoists the shared value onto that group; child:attr value -> None drops the copy the child now inherits): svg[1]:font-family None -> 'Arial'; text[5]:font-family 'Arial' -> None; text[6]:font-family 'Arial' -> None (advisory; normalize with `python3 scripts/compact_svg_styles.py <svg_output> --inplace`, re-stamp pages that carry Chart/Table fallbacks, and rerun the final gate, or leave the explicit form)",
+        "Recommendation: fill='#FFF' is converter-compatible in 1 location(s) (<text> attribute); generated SVG should prefer fill=\"#FFFFFF\". No change is required for export.",
+        "Reference SVG: detected 1 visible root-level <g> module(s) without explicit data-pptx-bounds (<g id=\"pulse-box\">); every final-page/template root <g> other than a compact authored-preset atom declares its root-coordinate layout subcanvas even when it also carries native coordinates"
+      ],
+      "info": {
+        "viewbox": "0 0 1280 720",
+        "carrier_receipt": {
+          "text_elements": 2,
+          "images": {
+            "placements": 0,
+            "files": [],
+            "max_frame_share": 0.0
+          },
+          "icons": 0,
+          "effects": {
+            "inline_emphasis_runs": 0,
+            "gradient_uses": 0,
+            "filter_uses": 0,
+            "text_effects": 0
+          },
+          "geometry": {
+            "svg_elements": {
+              "rect": 2,
+              "circle": 0,
+              "ellipse": 0,
+              "line": 0,
+              "polyline": 0,
+              "polygon": 0,
+              "path": 0
+            },
+            "preset_shapes": 0,
+            "preset_names": {},
+            "page_frame_elements": 0,
+            "marker_uses": {
+              "start": 0,
+              "mid": 0,
+              "end": 0
+            }
+          },
+          "native_objects": {
+            "chart": 0,
+            "table": 0,
+            "formula_block": 0,
+            "formula_inline": 0,
+            "other": 0
+          }
+        },
+        "fonts": [
+          "Arial"
+        ],
+        "text_elements": 2,
+        "tspan_elements": 0
+      },
+      "passed": true,
+      "source_sha256": "388e2ee8a3aadcf939f976072528ec0cd83c3fe2cac03c5e299d21ab4dc5c328"
+    }
+  ]
+}

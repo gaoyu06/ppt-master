@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:pptx="http://pptx-svg.dev/ns/1"
+     viewBox="0 0 1280 720">
+  <!-- P4 验证：pptx:crop + on=idref 点击触发器 + 自定义 path 动画 + exit 动画 -->
+  <pptx:transition effect="morph" dur="0.6"/>
+  <pptx:notes>媒体页：图片应只显示中心红块区域；点击绿色按钮，黄圆沿路径移动；再点击蓝块淡出。</pptx:notes>
+
+  <rect width="1280" height="720" fill="#FFFFFF"/>
+  <text x="80" y="80" font-size="36" fill="#1D3557" font-family="Arial">图片/触发器验收</text>
+
+  <!-- pptx:crop="0.25,0.17,0.25,0.17" 应裁掉网格边框，只留中心红块；
+       PowerPoint 裁剪工具打开应能看到完整原图 -->
+  <image x="80" y="130" width="400" height="300" href="grid.png"
+         pptx:crop="0.25,0.17,0.25,0.17" pptx:name="裁剪示例图"/>
+
+  <g id="btn-trigger">
+    <rect x="80" y="480" width="200" height="64" rx="10" fill="#2A9D8F"/>
+    <text x="130" y="520" font-size="20" fill="#FFF" font-family="Arial">点我移动黄圆</text>
+  </g>
+
+  <g id="mover">
+    <circle cx="640" cy="560" r="28" fill="#F4A261"/>
+    <pptx:anim effect="path" path="M 0 0 L .25 0 C .4 -.2 .1 -.2 .25 0"
+               start="click" on="btn-trigger" dur="1.6" autorev="true"/>
+  </g>
+
+  <g id="vanisher">
+    <rect x="560" y="130" width="300" height="160" rx="12" fill="#457B9D"/>
+    <text x="600" y="220" font-size="22" fill="#FFF" font-family="Arial">点击后我淡出(exit_fade)</text>
+    <pptx:anim effect="exit_fade" start="click" dur="0.8"/>
+  </g>
+
+  <text x="80" y="620" font-size="18" fill="#666" font-family="Arial">
+    检查：srcRect 25%/17%；btn-trigger 应出现在"计时→触发器"里；path 是 slide 分数坐标
+  </text>
+</svg>

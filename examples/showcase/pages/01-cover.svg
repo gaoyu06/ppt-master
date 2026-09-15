@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:pptx="http://pptx-svg.dev/ns/1"
+     viewBox="0 0 1280 720" lang="zh-CN">
+  <!-- P1 验证：pptx:transition(fade,0.5s) + pptx:notes + pptx:anim(entrance_fade/emphasis with) + pptx:effect(outer-shadow/glow) + pptx:name + pptx:autofit -->
+  <pptx:transition effect="fade" dur="0.5"/>
+  <pptx:notes>封面页：打开应看到 fade 转场；本备注应出现在演示者备注区。</pptx:notes>
+
+  <rect width="1280" height="720" fill="#1D3557"/>
+  <g id="hero-dot">
+    <circle cx="1150" cy="100" r="60" fill="#E63946"
+            pptx:effect="glow(rad=12,color=#E63946,alpha=0.6)"/>
+    <pptx:anim effect="emphasis_grow_shrink" start="with" dur="1.2" size="1.15"/>
+  </g>
+
+  <g id="cover-title">
+    <text x="120" y="300" font-size="72" fill="#FFFFFF" font-family="Arial"
+          pptx:name="主标题" pptx:effect="outer-shadow(blur=10,dist=6,dir=90,color=#00000080)">pptx-svg 全特性验收</text>
+    <pptx:anim effect="entrance_fade" start="click" dur="0.6"/>
+  </g>
+
+  <g id="cover-sub">
+    <text x="120" y="380" font-size="24" fill="#A8DADC" font-family="Arial"
+          pptx:autofit="norm">本页应看到：标题淡入(点击)、右上角红圆持续放大缩小、标题投影、本页备注</text>
+    <pptx:anim effect="entrance_wipe" start="after" dur="0.5" dir="up"/>
+  </g>
+</svg>

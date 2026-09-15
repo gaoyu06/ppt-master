@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:pptx="http://pptx-svg.dev/ns/1"
+     viewBox="0 0 1280 720">
+  <!-- P2 验证：pptx:transition(push dir=left) + pptx:build=paragraph + pptx:line-height/space-before/soft-break/line-break + pptx:vert + pptx:anchor -->
+  <pptx:transition effect="push" dir="left" dur="0.4"/>
+  <pptx:notes>文本页：bullet 应按段落逐条擦除进入；竖排文字应竖直显示。</pptx:notes>
+
+  <rect width="1280" height="720" fill="#FFFFFF"/>
+  <rect x="0" y="0" width="120" height="720" fill="#457B9D"/>
+
+  <text x="60" y="80" font-size="28" fill="#FFFFFF" font-family="Arial"
+        pptx:vert="eaVert" pptx:anchor="ctr">竖排验收文字</text>
+
+  <text x="160" y="90" font-size="36" fill="#1D3557" font-family="Arial"
+        pptx:name="页面标题">文本能力验收</text>
+
+  <g id="bullets" pptx:build="paragraph">
+    <text x="160" y="180" font-size="24" fill="#333333" font-family="Arial"
+          pptx:line-height="1.6" pptx:space-before="12">
+      <tspan x="160" dy="0">• 第一条：应按段落逐条进入（wipe up）</tspan>
+      <tspan x="160" dy="50">• 第二条：行距 1.6、段前距 12px</tspan>
+      <tspan x="160" dy="50">• 第三条：本条包含软换行<tspan pptx:soft-break="true">——同一 a:p 内的 a:br</tspan></tspan>
+      <tspan x="160" dy="50" pptx:line-break="true">• 第四条：本条之后是硬换行（新 a:p）</tspan>
+      <tspan x="160" dy="50">• 第五条：build=paragraph 应展开为 pRg 0..4</tspan>
+    </text>
+    <pptx:anim effect="entrance_wipe" start="click" dur="0.4" dir="up"/>
+  </g>
+</svg>

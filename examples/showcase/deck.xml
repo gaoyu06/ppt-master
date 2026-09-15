@@ -1,0 +1,9 @@
+<pptx:deck xmlns:pptx="http://pptx-svg.dev/ns/1"
+           format="ppt169" lang="zh-CN" title="pptx-svg 全特性验收">
+  <pptx:page src="pages/01-cover.svg"/>
+  <pptx:page src="pages/02-text.svg"/>
+  <pptx:page src="pages/03-effects.svg"/>
+  <pptx:page src="pages/04-media.svg"/>
+  <pptx:page src="pages/05-data.svg"/>
+  <pptx:page src="pages/06-end.svg"/>
+</pptx:deck>

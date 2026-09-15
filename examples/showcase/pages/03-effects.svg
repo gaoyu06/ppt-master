@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:pptx="http://pptx-svg.dev/ns/1"
+     viewBox="0 0 1280 720">
+  <!-- P3 验证：pptx:effect 全部六种 outer-shadow/inner-shadow/glow/soft-edge/reflection/blur + 链式动画 -->
+  <pptx:transition effect="wipe" dir="right" dur="0.4"/>
+  <pptx:notes>效果页：六张卡片分别验证六种效果；点击后卡片依次飞入，随后蓝卡脉冲。</pptx:notes>
+
+  <rect width="1280" height="720" fill="#F8F9FA"/>
+  <text x="80" y="80" font-size="36" fill="#1D3557" font-family="Arial">pptx:effect 验收</text>
+
+  <g id="card-outer">
+    <rect x="80" y="140" width="340" height="180" rx="12" fill="#FFFFFF"
+          pptx:effect="outer-shadow(blur=14,dist=8,dir=90,color=#1D355740)"/>
+    <text x="110" y="240" font-size="22" fill="#333" font-family="Arial">outer-shadow：右下投影</text>
+    <pptx:anim effect="entrance_fly" start="click" dur="0.5" dir="up"/>
+  </g>
+
+  <g id="card-inner">
+    <rect x="470" y="140" width="340" height="180" rx="12" fill="#E9ECEF"
+          pptx:effect="inner-shadow(blur=10,dist=5,dir=90,color=#00000059)"/>
+    <text x="500" y="240" font-size="22" fill="#333" font-family="Arial">inner-shadow：内凹</text>
+    <pptx:anim effect="entrance_fly" start="with" dur="0.5" dir="up" delay="0.15"/>
+  </g>
+
+  <g id="card-glow">
+    <rect x="860" y="140" width="340" height="180" rx="12" fill="#457B9D"
+          pptx:effect="glow(rad=14,color=#457B9D,alpha=0.8)"/>
+    <text x="890" y="240" font-size="22" fill="#FFF" font-family="Arial">glow：外发光</text>
+    <pptx:anim effect="entrance_fly" start="with" dur="0.5" dir="up" delay="0.3"/>
+    <pptx:anim effect="emphasis_grow_shrink" start="after" dur="0.8" size="1.1"/>
+  </g>
+
+  <g id="card-soft">
+    <rect x="80" y="380" width="340" height="180" rx="12" fill="#E63946"
+          pptx:effect="soft-edge(rad=10)"/>
+    <text x="110" y="480" font-size="22" fill="#FFF" font-family="Arial">soft-edge：边缘羽化</text>
+  </g>
+
+  <g id="card-refl">
+    <rect x="470" y="380" width="340" height="180" rx="12" fill="#2A9D8F"
+          pptx:effect="reflection(dist=4,alpha=0.4)"/>
+    <text x="500" y="480" font-size="22" fill="#FFF" font-family="Arial">reflection：倒影</text>
+  </g>
+
+  <g id="card-blur">
+    <rect x="860" y="380" width="340" height="180" rx="12" fill="#F4A261"
+          pptx:effect="blur(rad=6)"/>
+    <text x="890" y="480" font-size="22" fill="#FFF" font-family="Arial">blur：整体模糊</text>
+  </g>
+</svg>
