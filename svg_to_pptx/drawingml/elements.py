@@ -3563,20 +3563,23 @@ def convert_text(elem: ET.Element, ctx: ConvertContext) -> ShapeResult | None:
     # Shadow effect
     shape_effect_xml = ''
     text_effect_xml = ''
-    filt_id = get_effective_filter_id(elem, ctx)
-    if filt_id and filt_id in ctx.defs:
-        filter_elem = ctx.defs[filt_id]
-        effect_kind = classify_filter_effect(filter_elem)
-        if effect_kind == 'glow':
-            text_effect_xml = build_effect_xml(
-                filter_elem,
-                get_element_opacity(elem, ctx),
-            )
-        elif effect_kind == 'shadow':
-            shape_effect_xml = build_effect_xml(
-                filter_elem,
-                get_element_opacity(elem, ctx),
-            )
+    if pptx_attr(elem, 'effect') is not None:
+        shape_effect_xml = _element_effect_xml(elem, ctx)
+    else:
+        filt_id = get_effective_filter_id(elem, ctx)
+        if filt_id and filt_id in ctx.defs:
+            filter_elem = ctx.defs[filt_id]
+            effect_kind = classify_filter_effect(filter_elem)
+            if effect_kind == 'glow':
+                text_effect_xml = build_effect_xml(
+                    filter_elem,
+                    get_element_opacity(elem, ctx),
+                )
+            elif effect_kind == 'shadow':
+                shape_effect_xml = build_effect_xml(
+                    filter_elem,
+                    get_element_opacity(elem, ctx),
+                )
 
     shape_id = _claim_element_shape_id(elem, ctx)
     rot_attr = f' rot="{text_rot}"' if text_rot else ''

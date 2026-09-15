@@ -3268,6 +3268,18 @@ Recorded narration:
 
     verbose = not args.quiet
 
+    # <pptx:notes> is an explicit authoring act: it lifts the quick-generate
+    # default-off, but never an explicit --no-notes.
+    if (
+        args.no_notes
+        and '--no-notes' not in raw_argv
+        and any(
+            '<pptx:notes' in path.read_text(encoding='utf-8', errors='ignore')
+            for path in native_files
+        )
+    ):
+        args.no_notes = False
+
     enable_notes = not args.no_notes
     notes: dict[str, str] = {}
     if enable_notes:

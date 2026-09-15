@@ -676,9 +676,11 @@ def normalize_language_attrs(root: ET.Element, slide_name: str) -> None:
                 )
             # pptx:data declares the embedded JSON authoritative: the
             # visible children are an authored preview, so no
-            # fallback-sha256 baseline is required.
+            # fallback-sha256 baseline is required. ``kind`` selects the
+            # marker and is not part of the native payload schema.
+            payload = {k: v for k, v in payload.items() if k != 'kind'}
             elem.set('data-pptx-replace-with', kind)
-            elem.set('data-pptx-json', data)
+            elem.set('data-pptx-json', json.dumps(payload, ensure_ascii=False))
             elem.set('data-pptx-native-authority', 'json')
         crop = pptx_attr(elem, 'crop')
         if crop is not None:
