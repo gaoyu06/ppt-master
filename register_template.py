@@ -67,7 +67,7 @@ configure_utf8_stdio()
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-SKILL_DIR = SCRIPT_DIR.parent
+SKILL_DIR = SCRIPT_DIR
 TEMPLATES_DIR = SKILL_DIR / "templates"
 
 KIND_CONFIG = {

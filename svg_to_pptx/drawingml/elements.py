@@ -35,6 +35,7 @@ from hyperlink_contract import svg_hyperlink_href
 from pptx_to_svg.preset_authoring import AUTHORING_ATTR, AUTHORING_VALUE
 from ..pptx_syntax import (
     effect_call_filter_xml,
+    parse_crop_src_rect,
     parse_effect_calls,
     pptx_attr,
     pptx_attr_or_data,
@@ -4803,6 +4804,10 @@ def _resolve_image_src_rect_values(
     shrinks the picture frame to match image aspect ratio); none mode keeps
     the legacy stretch behaviour intentionally.
     """
+    explicit = pptx_attr(elem, 'crop')
+    if explicit is not None:
+        return parse_crop_src_rect(explicit)
+
     align, mode = parse_project_image_aspect_ratio(
         elem.get('preserveAspectRatio')
     )
@@ -4975,17 +4980,14 @@ def convert_image(elem: ET.Element, ctx: ConvertContext) -> ShapeResult | None:
         raw_h,
     )
     visible_source_fraction = None
-    if align == 'none':
+    if src_rect is not None:
+        src_l, src_t, src_r, src_b = src_rect
+        visible_source_fraction = (
+            1.0 - (src_l + src_r) / 100000.0,
+            1.0 - (src_t + src_b) / 100000.0,
+        )
+    elif align == 'none' or mode == 'slice':
         visible_source_fraction = (1.0, 1.0)
-    elif mode == 'slice':
-        if src_rect is None:
-            visible_source_fraction = (1.0, 1.0)
-        else:
-            src_l, src_t, src_r, src_b = src_rect
-            visible_source_fraction = (
-                1.0 - (src_l + src_r) / 100000.0,
-                1.0 - (src_t + src_b) / 100000.0,
-            )
     img_data, img_format = _optimize_image_for_pptx(
         ctx,
         img_data,

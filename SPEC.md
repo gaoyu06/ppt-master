@@ -1,9 +1,10 @@
 # pptx-svg — Language Specification (v0.1)
 
-> Implementation status: §3 text-body/effects/name/paragraph attrs, §4
-> `anim`/`transition`/`notes`, §10 sidecar fallback — implemented and
-> compile-checked. `pptx:ph`, `pptx:crop`, `pptx:formula`, `pptx:data`,
-> `deck.xml` — pending.
+> Implementation status: all of §3–§7 and `deck.xml` (§1) are implemented
+> and compile-checked. `pptx:ph` binds to the structured-deck placeholder
+> contract (slot `<g>` + `data-pptx-bounds` + carrier child); `pic`/`tbl`
+> alias to `picture`/`table`. `pptx:data` JSON declares itself
+> authoritative and must carry `x`/`y`/`width`/`height` in px.
 
 An SVG superset for authoring PowerPoint decks. Every page is a
 standalone, valid SVG document; PowerPoint semantics are expressed

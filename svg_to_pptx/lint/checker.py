@@ -185,6 +185,11 @@ class SVGLinter(DialectChecks, TextChecks, TextGeometryChecks, ResourceChecks, S
             root = self._parse_xml_root(content, result)
             if root is not None:
                 self._check_canonical_authoring(root, result)
+                if normalize_language_attrs is not None:
+                    try:
+                        normalize_language_attrs(root, svg_path.stem)
+                    except ValueError as exc:
+                        result['errors'].append(f'{svg_path.name}: {exc}')
                 try:
                     hydrated_payloads = hydrate_native_payload_refs(root, svg_path)
                 except NativePayloadError as exc:

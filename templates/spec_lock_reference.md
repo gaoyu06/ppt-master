@@ -100,7 +100,7 @@ Typography projection (excluding Character/upgrade References): Title font stack
 
 ## 5. Machine Validation
 
-`python3 skills/ppt-master/scripts/project_manager.py validate <project_path>` reports unresolved `[fill...]` placeholders, wrong casing, unknown sections or fields, illegal enums, malformed page keys, missing catalog assets, broken structured-layout references, and unmet conditions; it neither rewrites the lock nor checks semantic projection (Gate 2 does). Field meaning stays in the Strategist modules; Executor branches own consumption; the schema owns grammar and structural conditions only.
+`python3 project_manager.py validate <project_path>` reports unresolved `[fill...]` placeholders, wrong casing, unknown sections or fields, illegal enums, malformed page keys, missing catalog assets, broken structured-layout references, and unmet conditions; it neither rewrites the lock nor checks semantic projection (Gate 2 does). Field meaning stays in the Strategist modules; Executor branches own consumption; the schema owns grammar and structural conditions only.
 
 ## 6. Anchor and extension semantics
 

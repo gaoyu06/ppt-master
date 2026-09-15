@@ -149,6 +149,11 @@ except ImportError:
     _preserved_native_text_body = None
 
 try:
+    from svg_to_pptx.pptx_syntax import normalize_language_attrs
+except ImportError:
+    normalize_language_attrs = None
+
+try:
     from svg_to_pptx.drawingml.styles import parse_pattern_colors as _parse_pattern_colors
 except ImportError:
     _parse_pattern_colors = None

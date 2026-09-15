@@ -83,6 +83,7 @@ if __package__ in {None, ''}:
 
 from .dimensions import CANVAS_FORMATS, get_project_info
 from .discovery import NotesFileReadError, find_notes_files, find_svg_files
+from ..deck_manifest import DeckManifestError, load_deck_manifest
 from .builder import RoundtripSlidePatch, create_pptx_with_native_svg
 from ..native_objects import (
     native_fallback_kind,
@@ -1743,7 +1744,7 @@ def _print_structure_contract_error(
         print(
             "  A legacy lock without pptx_structure.mode defaults only to flat. "
             "Mirror/layout reuse must first create a current template workspace "
-            "through skills/ppt-master/workflows/create-template.md, then generate "
+            "through register_template.py, then generate "
             "new structured SVG pages.",
             file=sys.stderr,
         )
@@ -1758,7 +1759,7 @@ def _print_structure_contract_error(
         "  A legacy lock with no pptx_structure.mode defaults to flat. "
         "Explicit legacy or unknown values are not inferred. Mirror/layout reuse "
         "must first create a current template workspace "
-        "through skills/ppt-master/workflows/create-template.md, then generate "
+        "through register_template.py, then generate "
         "new structured SVG pages.",
         file=sys.stderr,
     )
@@ -2454,6 +2455,12 @@ Recorded narration:
             )
             return 1
 
+    try:
+        deck_manifest = load_deck_manifest(project_path)
+    except DeckManifestError as exc:
+        print(f'Error: {exc}', file=sys.stderr)
+        return 1
+
     structure_lock = None
     native_structure_contract = None
     roundtrip_manifest: dict[str, object] | None = None
@@ -2486,6 +2493,8 @@ Recorded narration:
     except LanguageTagError as exc:
         print(f"Error: {exc}", file=sys.stderr)
         return 1
+    if primary_language is None and deck_manifest is not None:
+        primary_language = deck_manifest.lang
     if primary_language is None:
         print(
             "Warning: no deck language declared ("
@@ -2676,13 +2685,18 @@ Recorded narration:
         return 1
 
     # Native DrawingML is the only PPTX product. ``svg_output/`` is the default;
-    # ``-s`` selects another project-relative SVG directory.
+    # ``-s`` selects another project-relative SVG directory. A deck.xml
+    # manifest, when present, is authoritative for the page set and order.
     native_source = args.source or 'output'
-    native_files, native_source_dir = find_svg_files(
-        project_path,
-        native_source,
-        allow_fallback=False,
-    )
+    if deck_manifest is not None:
+        native_files = deck_manifest.pages
+        native_source_dir = deck_manifest.source_dir
+    else:
+        native_files, native_source_dir = find_svg_files(
+            project_path,
+            native_source,
+            allow_fallback=False,
+        )
     if args.roundtrip:
         native_files = [
             path
@@ -3707,6 +3721,9 @@ Recorded narration:
                     print(f"  Document properties: metadata.json ({len(loaded)} field(s))")
             else:
                 print("  [warn] metadata.json ignored (top level is not an object)", file=sys.stderr)
+    if deck_manifest is not None and deck_manifest.title is not None:
+        doc_metadata = dict(doc_metadata or {})
+        doc_metadata.setdefault('title', deck_manifest.title)
 
     structure_name = project_name
     if isinstance(doc_metadata, dict):

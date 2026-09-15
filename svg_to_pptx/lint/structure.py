@@ -682,7 +682,7 @@ class StructureChecks:
                 'release SVG projects require spec_lock.md pptx_structure.mode: '
                 'flat (free design / brand-only) or structured (deck/layout '
                 f'template); found {declared_mode!r}. Create a template '
-                'workspace through skills/ppt-master/workflows/create-template.md '
+                'workspace through register_template.py '
                 'before generating structured SVG pages. Existing PPTX/SVG files '
                 'are not upgraded in place.',
             ))
@@ -1112,7 +1112,7 @@ class StructureChecks:
                     "source-analysis native_structure/source.pptx contracts "
                     "must not be packaged as reusable template inputs; rebuild "
                     "through "
-                    "skills/ppt-master/workflows/create-template.md",
+                    "register_template.py",
                 ))
 
             if declared_structure_mode != 'structured':
@@ -1129,8 +1129,7 @@ class StructureChecks:
                     'error',
                     'legacy_structure_contract',
                     "legacy template structure detected; create a new current "
-                    "workspace through skills/ppt-master/workflows/"
-                    "create-template.md before Step 3 consumption",
+                    "workspace through register_template.py before Step 3 consumption",
                 ))
         spec_pages = self._extract_spec_roster(spec_text) if spec_text else []
         custom_contract = self._extract_frontmatter_placeholders(spec_text) if spec_text else {}

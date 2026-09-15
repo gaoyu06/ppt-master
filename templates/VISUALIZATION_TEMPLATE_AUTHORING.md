@@ -449,12 +449,12 @@ Table；日期或持续时间决定 `x`/`width` 的排期是 `chart/gantt_chart`
 
 ```bash
 # 单文件 SVG 合同
-python3 skills/ppt-master/scripts/svg_lint.py \
-  skills/ppt-master/templates/<family-directory>/<key>.svg \
+python3 svg_lint.py \
+  templates/<family-directory>/<key>.svg \
   --canonical-authoring
 
 # Canonical family/key
-python3 skills/ppt-master/scripts/visualization_recall.py validate \
+python3 visualization_recall.py validate \
   <family>/<key>
 
 # 作者态必须已紧凑；Checker 只读验证，不在检查后重写

@@ -39,7 +39,7 @@ from svg_authoring_view import (
 )
 from svg_compatibility import normalize_single_child_group_filters
 
-from ..pptx_syntax import is_pptx_element
+from ..pptx_syntax import is_pptx_element, normalize_language_attrs, pptx_attr
 from .context import (
     TEXT_FLOW_PRESERVE,
     TEXT_FLOW_SPLIT,
@@ -2045,6 +2045,10 @@ def convert_svg_to_slide_shapes(
             ) from exc
     tree = ET.parse(str(svg_path))
     root = tree.getroot()
+    try:
+        normalize_language_attrs(root, svg_path.stem)
+    except ValueError as exc:
+        raise SvgNativeConversionError(str(exc)) from exc
     _hydrate_native_payloads(root, svg_path)
     try:
         parse_project_svg_root(

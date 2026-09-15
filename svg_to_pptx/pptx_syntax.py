@@ -10,6 +10,7 @@ quality checker deliberately passes the namespace through.
 
 from __future__ import annotations
 
+import json
 import re
 from dataclasses import dataclass
 from typing import Any
@@ -24,7 +25,18 @@ PPTX_ATTR_NAMES = frozenset({
     'vert', 'anchor', 'autofit',
     'effect', 'build', 'name',
     'line-height', 'space-before', 'soft-break', 'line-break',
+    'ph', 'crop', 'formula', 'data',
 })
+
+# ``pptx:ph`` placeholder vocabulary (mirrors template_structure._PLACEHOLDERS).
+_PLACEHOLDER_NAMES = frozenset({
+    'title', 'subtitle', 'body', 'picture', 'chart', 'table',
+    'object', 'media', 'date', 'footer', 'slide-number',
+})
+_PH_ALIASES = {'pic': 'picture', 'tbl': 'table'}
+
+# ``pptx:data`` payload kinds that compile to native graphicFrames.
+_NATIVE_DATA_KINDS = frozenset({'chart', 'table'})
 
 _ANIM_STARTS = {
     'click': 'on-click',
@@ -565,3 +577,145 @@ def effect_call_filter_xml(name: str, params: dict[str, str], label: str) -> ET.
         primitive = ET.SubElement(filter_elem, 'feGaussianBlur')
         primitive.set('stdDeviation', str(px('rad', 4.0) / 2.0))
     return filter_elem
+
+
+_SVG_TSPAN = '{http://www.w3.org/2000/svg}tspan'
+
+
+def normalize_language_attrs(root: ET.Element, slide_name: str) -> None:
+    """Translate authored ``pptx:`` element attributes into internal markers.
+
+    ``pptx:ph``/``pptx:formula``/``pptx:data`` are the public spellings of
+    ``data-pptx-placeholder``/``data-pptx-inline-formula``/the native-object
+    replacement pair. This pass runs on every parsed tree before validation
+    and conversion so downstream pipelines see one dialect. ``pptx:crop``
+    is read directly by the image converter and needs no rewrite.
+    """
+    for elem in root.iter():
+        if not isinstance(elem.tag, str) or is_pptx_element(elem):
+            continue
+        tag = _svg_local(elem)
+        label = f'{slide_name}: <{tag}>'
+        ph = pptx_attr(elem, 'ph')
+        if ph is not None:
+            value = _PH_ALIASES.get(ph.strip().lower(), ph.strip().lower())
+            if value not in _PLACEHOLDER_NAMES:
+                raise ValueError(
+                    f'{label} pptx:ph must be one of '
+                    f'{", ".join(sorted(_PLACEHOLDER_NAMES))}; got {ph!r}'
+                )
+            if elem.get('data-pptx-placeholder') is not None:
+                raise ValueError(
+                    f'{label} sets both pptx:ph and data-pptx-placeholder'
+                )
+            elem.set('data-pptx-placeholder', value)
+        formula = pptx_attr(elem, 'formula')
+        if formula is not None:
+            target = elem
+            if tag == 'text':
+                tspans = [
+                    child for child in elem if child.tag == _SVG_TSPAN
+                ]
+                if len(tspans) > 1:
+                    raise ValueError(
+                        f'{label} pptx:formula needs a single <tspan> '
+                        'carrying the preview text'
+                    )
+                if tspans:
+                    target = tspans[0]
+                elif (elem.text or '').strip():
+                    # <text pptx:formula="…">preview</text> — wrap the
+                    # direct text so the tspan-scoped formula marker
+                    # and preview contract apply unchanged.
+                    target = ET.SubElement(elem, _SVG_TSPAN)
+                    target.text = elem.text
+                    elem.text = None
+                else:
+                    raise ValueError(
+                        f'{label} pptx:formula needs preview text or one '
+                        '<tspan> child'
+                    )
+            elif tag != 'tspan':
+                raise ValueError(
+                    f'{label} pptx:formula is only valid on <text> or '
+                    '<tspan>'
+                )
+            if target.get('data-pptx-inline-formula') is not None:
+                raise ValueError(
+                    f'{label} sets both pptx:formula and '
+                    'data-pptx-inline-formula'
+                )
+            target.set('data-pptx-inline-formula', formula)
+        data = pptx_attr(elem, 'data')
+        if data is not None:
+            if tag != 'g':
+                raise ValueError(
+                    f'{label} pptx:data is only valid on <g>'
+                )
+            try:
+                payload = json.loads(data)
+            except json.JSONDecodeError as exc:
+                raise ValueError(
+                    f'{label} pptx:data is not valid JSON: {exc.msg}'
+                ) from None
+            if not isinstance(payload, dict):
+                raise ValueError(
+                    f'{label} pptx:data must be a JSON object'
+                )
+            kind = str(payload.get('kind') or '').strip().lower()
+            if kind not in _NATIVE_DATA_KINDS:
+                raise ValueError(
+                    f'{label} pptx:data requires "kind" to be one of '
+                    f'{", ".join(sorted(_NATIVE_DATA_KINDS))}; '
+                    f'got {payload.get("kind")!r}'
+                )
+            if elem.get('data-pptx-replace-with') is not None:
+                raise ValueError(
+                    f'{label} sets both pptx:data and '
+                    'data-pptx-replace-with'
+                )
+            # pptx:data declares the embedded JSON authoritative: the
+            # visible children are an authored preview, so no
+            # fallback-sha256 baseline is required.
+            elem.set('data-pptx-replace-with', kind)
+            elem.set('data-pptx-json', data)
+            elem.set('data-pptx-native-authority', 'json')
+        crop = pptx_attr(elem, 'crop')
+        if crop is not None:
+            if tag != 'image':
+                raise ValueError(
+                    f'{label} pptx:crop is only valid on <image>'
+                )
+            parse_crop_src_rect(crop)
+
+
+def parse_crop_src_rect(value: str) -> tuple[int, int, int, int] | None:
+    """Parse ``pptx:crop="l,t,r,b"`` fractions into DrawingML srcRect units
+    (1/1000 of a percent). Returns None for a zero crop."""
+    parts = [part.strip() for part in value.split(',')]
+    if len(parts) != 4:
+        raise ValueError(
+            f'pptx:crop expects four fractions "l,t,r,b"; got {value!r}'
+        )
+    fractions: list[float] = []
+    for part in parts:
+        try:
+            number = float(part)
+        except ValueError:
+            raise ValueError(
+                f'pptx:crop values must be fractions; got {part!r}'
+            ) from None
+        if not 0.0 <= number <= 1.0:
+            raise ValueError(
+                f'pptx:crop values must be between 0 and 1; got {part!r}'
+            )
+        fractions.append(number)
+    if fractions[0] + fractions[2] > 1.0 or fractions[1] + fractions[3] > 1.0:
+        raise ValueError(
+            'pptx:crop l+r and t+b must each not exceed 1; '
+            f'got {value!r}'
+        )
+    l, t, r, b = (int(round(frac * 100000)) for frac in fractions)
+    if not (l or t or r or b):
+        return None
+    return (l, t, r, b)
